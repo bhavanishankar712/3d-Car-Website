@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LAMBORGHINI AVENTADOR SVJ // CINEMATIC 3D SHOWROOM</title>
+  <meta name="description" content="Realistic cinematic interactive 3D digital automotive showroom for the Lamborghini Aventador SVJ. Featuring real-time bottom configurator, 360° inspection, realistic headlights, day/night mode, and full 87-component mechanical exploded view on scroll.">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/responsive.css">
+
+  <script>
+    // Failsafe: Ensures preloader is dismissed if model is already loaded
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const p = document.getElementById('preloader');
+        if (p && !p.classList.contains('loaded')) {
+          p.classList.add('loaded');
+          p.style.display = 'none';
+        }
+      }, 3500);
+    });
+  </script>
+</head>
+<body>
+
+  <!-- ========================================================================
+       PRELOADER & HARDWARE TELEMETRY
+       ======================================================================== -->
+  <div id="preloader" role="progressbar" aria-label="Loading 3D Showroom">
+    <div class="loader-content">
+      <div class="loader-badge">AUTOMOBILI LAMBORGHINI S.P.A.</div>
+      <h1 class="loader-title">AVENTADOR SVJ // 63</h1>
+      <p class="loader-subtitle">INITIALIZING DIGITAL SHOWROOM &amp; HARDWARE ACCELERATION</p>
+      
+      <div class="loader-bar-wrap">
+        <div id="loader-bar-fill" class="loader-bar-fill"></div>
+      </div>
+
+      <div class="loader-status">
+        <span id="loader-status-text">INITIALIZING V12 MONOCOQUE...</span>
+        <span id="loader-percent">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       WEBGL CANVAS CONTAINER
+       ======================================================================== -->
+  <div id="webgl-canvas-container">
+    <canvas id="webgl-canvas"></canvas>
+  </div>
+
+  <!-- ========================================================================
+       SCROLL STORYTELLING CONTAINER
+       ======================================================================== -->
+  <main id="scroll-container">
+
+    <!-- Section 1: Hero Showroom with Bottom Configurator Dock -->
+    <section id="section-hero" class="scroll-section">
+
+      <!-- Minimal Top Brand Badge (No Nav Menu) -->
+      <div class="hero-header-minimal">
+        <div class="hero-brand">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none">
+            <polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 12,22 2,15.5 12,22 2,15.5 12,22 2,15.5 12,8.5" stroke="#00d2ff" stroke-width="1.8" fill="rgba(0, 210, 255, 0.1)"/>
+            <path d="M12 6L18 10L12 14L6 10Z" fill="#00d2ff"/>
+          </svg>
+          <div class="brand-info">
+            <span class="brand-title">AVENTADOR SVJ</span>
+            <span class="brand-meta">6.5L V12 // 770 CV // ALA 2.0</span>
+          </div>
+        </div>
+
+        <div class="hero-scroll-invite">
+          <span>SCROLL DOWN TO EXPLODE</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00d2ff" stroke-width="2">
+            <path d="M12 5v14M19 12l-7 7-7-7"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Configurator Option in Hero Section at the Bottom -->
+      <aside id="hero-configurator-dock" class="hero-config-dock interactive-panel" aria-label="Vehicle Configurator">
+        <!-- Dock Header: Category Tabs & Vehicle Controls -->
+        <div class="dock-header">
+          <div class="dock-tabs" role="tablist">
+            <button class="config-tab-btn active" data-tab="paint" role="tab">BODY PAINT</button>
+            <button class="config-tab-btn" data-tab="wheels" role="tab">WHEELS</button>
+            <button class="config-tab-btn" data-tab="wheel-color" role="tab">FINISH</button>
+            <button class="config-tab-btn" data-tab="calipers" role="tab">CALIPERS</button>
+            <button class="config-tab-btn" data-tab="interior" role="tab">COCKPIT</button>
+          </div>
+
+          <div class="dock-actions">
+            <button id="btn-lights-toggle" class="dock-btn active" aria-label="Toggle Headlights">
+              <span class="dock-dot"></span>
+              <span>LIGHTS</span>
+            </button>
+            <button id="btn-daynight-toggle" class="dock-btn" aria-label="Toggle Day Night Mode">
+              <span class="dock-dot"></span>
+              <span>NIGHT</span>
+            </button>
+            <button id="btn-rotate-toggle" class="dock-btn active" aria-label="Toggle 360 Turntable Auto Rotation">
+              <span class="dock-dot"></span>
+              <span>360° SPIN</span>
+            </button>
+            <button id="btn-sound-toggle" class="dock-btn" aria-label="Toggle V12 Engine Sound">
+              <span class="dock-dot"></span>
+              <span>START V12</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dock Panes: Swatches & Options -->
+        <div class="dock-panes">
+          <!-- Pane 1: Exterior Body Paint -->
+          <div id="pane-paint" class="tab-pane active" role="tabpanel">
+            <div class="pane-meta">
+              <span class="pane-label">EXTERIOR PAINT:</span>
+              <span id="label-body-color" class="pane-val">Grigio Titans (Reference Silver)</span>
+            </div>
+            <div id="swatches-body-color" class="dock-swatches-grid"></div>
+          </div>
+
+          <!-- Pane 2: Wheel Styles -->
+          <div id="pane-wheels" class="tab-pane" role="tabpanel">
+            <div class="pane-meta">
+              <span class="pane-label">FORGED WHEEL DESIGN:</span>
+            </div>
+            <div id="options-wheel-style" class="dock-cards-grid"></div>
+          </div>
+
+          <!-- Pane 3: Wheel Finish -->
+          <div id="pane-wheel-color" class="tab-pane" role="tabpanel">
+            <div class="pane-meta">
+              <span class="pane-label">WHEEL FINISH:</span>
+              <span id="label-wheel-color" class="pane-val">Satin Nero</span>
+            </div>
+            <div id="swatches-wheel-color" class="dock-swatches-grid"></div>
+          </div>
+
+          <!-- Pane 4: Calipers -->
+          <div id="pane-calipers" class="tab-pane" role="tabpanel">
+            <div class="pane-meta">
+              <span class="pane-label">CALIPER FINISH:</span>
+              <span id="label-caliper-color" class="pane-val">Rosso Mars</span>
+            </div>
+            <div id="swatches-caliper-color" class="dock-swatches-grid"></div>
+          </div>
+
+          <!-- Pane 5: Interior Upholstery -->
+          <div id="pane-interior" class="tab-pane" role="tabpanel">
+            <div class="pane-meta">
+              <span class="pane-label">COCKPIT TRIM:</span>
+              <span id="label-interior-color" class="pane-val">Nero Ade Alcantara</span>
+            </div>
+            <div id="swatches-interior-color" class="dock-swatches-grid"></div>
+          </div>
+        </div>
+
+        <!-- Dock Footer Build Code -->
+        <div class="dock-footer">
+          <div class="build-code">
+            SPEC: <span id="build-code-value">SVJ63 // EXT-GRIGIO / WHL-S01 / CAL-ROSSO</span>
+          </div>
+          <button id="btn-save-build" class="dock-save-btn">
+            SAVE SPEC
+          </button>
+        </div>
+      </aside>
+
+      <!-- Scroll Down Indicator -->
+      <div class="scroll-hint" aria-hidden="true">
+        <span class="scroll-text">SCROLL TO EXPLODE</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- Section 2: Exploded Mechanical View (Scroll down to explode) -->
+    <section id="section-exploded" class="scroll-section">
+      <div class="exploded-hud-display">
+        <div class="exploded-hud-tag">
+          <span class="pulse-indicator"></span>
+          <span>MECHANICAL DISASSEMBLY</span>
+        </div>
+        <div class="exploded-hud-counter" id="exploded-counter-val">0% EXPLODED</div>
+        <div class="exploded-hud-meter">
+          <div class="exploded-meter-fill" id="exploded-meter-fill"></div>
+        </div>
+        <div class="exploded-hud-subtext">87 PRECISION COMPONENTS IN ORBIT</div>
+      </div>
+    </section>
+
+    <!-- Section 3: Precision Reassembly on Further Scroll -->
+    <section id="section-reassembly" class="scroll-section">
+      <div class="reassembly-card interactive-panel">
+        <div class="section-tag">REASSEMBLY</div>
+        <h2 class="section-title">STRUCTURAL INTEGRITY RESTORED</h2>
+        <p class="section-subtitle" style="margin: 14px auto; max-width: 480px;">
+          Scroll up to reverse the explosion or inspect all 87 components from any angle with 360° mouse drag.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification Pill -->
+  <div id="toast-notification" role="status" aria-live="polite">Configuration Updated</div>
+
+  <!-- ========================================================================
+       SCRIPTS (Locally Vendored Three.js & GSAP + Modular Architecture)
+       ======================================================================== -->
+  <script src="./js/libs/three.min.js"></script>
+  <script src="./js/libs/GLTFLoader.js"></script>
+  <script src="./js/libs/OrbitControls.js"></script>
+  <script src="./js/libs/gsap.min.js"></script>
+  <script src="./js/libs/ScrollTrigger.min.js"></script>
+
+  <!-- Application Modules -->
+  <script src="./js/showroom.js"></script>
+  <script src="./js/car.js"></script>
+  <script src="./js/lights.js"></script>
+  <script src="./js/camera.js"></script>
+  <script src="./js/explosion.js"></script>
+  <script src="./js/configurator.js"></script>
+  <script src="./js/interaction.js"></script>
+  <script src="./js/main.js"></script>
+
+</body>
+</html>

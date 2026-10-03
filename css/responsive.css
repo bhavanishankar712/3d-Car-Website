@@ -1,0 +1,108 @@
+/* ==========================================================================
+   AVENTADOR SVJ // CINEMATIC AUTOMOTIVE SHOWROOM
+   Responsive Styles & Media Queries
+   ========================================================================== */
+
+/* Tablet & Smaller Laptops (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .hero-config-dock {
+    width: calc(100vw - 40px);
+    padding: 12px 18px;
+  }
+
+  .scroll-section {
+    padding: 60px 30px;
+  }
+
+  .scroll-hint {
+    right: 30px;
+    bottom: 90px;
+  }
+}
+
+/* Mobile Screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .hero-header-minimal {
+    top: 14px;
+    left: 16px;
+    right: 16px;
+  }
+
+  .brand-title {
+    font-size: 13px;
+  }
+
+  .brand-meta {
+    font-size: 8px;
+  }
+
+  .hero-scroll-invite {
+    display: none;
+  }
+
+  .hero-config-dock {
+    bottom: 12px;
+    width: calc(100vw - 24px);
+    padding: 10px 14px;
+    border-radius: 16px;
+  }
+
+  .dock-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .dock-tabs {
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+
+  .dock-actions {
+    justify-content: space-between;
+    overflow-x: auto;
+  }
+
+  .dock-btn {
+    padding: 4px 8px;
+    font-size: 8px;
+  }
+
+  .swatch-btn {
+    width: 24px;
+    height: 24px;
+  }
+
+  .exploded-hud-display {
+    left: 16px;
+    top: 20px;
+    right: 16px;
+    max-width: none;
+    padding: 14px 18px;
+  }
+
+  .exploded-hud-counter {
+    font-size: 24px;
+  }
+
+  .section-title {
+    font-size: 26px;
+  }
+
+  .scroll-hint {
+    display: none;
+  }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .scroll-line, .dock-dot {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "aventador-svj-3d-showroom",
+  "version": "1.0.0",
+  "description": "Photorealistic, cinematic interactive 3D digital automotive showroom for Lamborghini Aventador SVJ with 33-component mechanical exploded view and real-time configurator.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "serve": "node server.js"
+  },
+  "keywords": [
+    "threejs",
+    "webgl",
+    "gsap",
+    "scrolltrigger",
+    "lamborghini",
+    "aventador-svj",
+    "3d-configurator",
+    "exploded-view",
+    "automotive-showroom"
+  ],
+  "author": "Antigravity Engineering",
+  "license": "MIT"
+}
