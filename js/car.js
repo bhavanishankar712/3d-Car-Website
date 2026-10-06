@@ -27,56 +27,93 @@ class CarController {
   load(modelPath, onProgress, onLoad, onError) {
     const loader = new THREE.GLTFLoader();
 
-    loader.load(
-      modelPath,
-      (gltf) => {
-        this.model = gltf.scene;
-        this.model.name = "AventadorModel";
+    const onModelLoaded = (gltf) => {
+      this.model = gltf.scene;
+      this.model.name = "AventadorModel";
 
-        // 1. Remove raw shadow plane from model hierarchy before calculating bounds
-        const shadow = this.model.getObjectByName("Obj_Shadow_Plane");
-        if (shadow && shadow.parent) {
-          shadow.parent.remove(shadow);
-        }
-
-        // 2. Scale car to authentic real-world supercar dimensions (length ~5.4m)
-        this.model.scale.set(0.2, 0.2, 0.2);
-        this.model.position.set(0, 0, 0);
-        this.model.updateMatrixWorld(true);
-
-        // 3. Compute accurate bounding box of pure car geometry
-        const box = new THREE.Box3().setFromObject(this.model);
-        const center = new THREE.Vector3();
-        box.getCenter(center);
-
-        // 4. Center horizontally at (0, y, 0) and ground bottom of tires cleanly at Y = 0
-        this.model.position.set(-center.x, -box.min.y, -center.z);
-        this.model.updateMatrixWorld(true);
-
-        // 5. Add model to car root group
-        this.carGroup.add(this.model);
-
-        // 6. Setup materials, registries, and SVJ Aerodynamic Wing
-        this.processMaterialsAndMeshes();
-        this.createSVJAeroWing();
-
-        // 7. Cache initial transforms for mechanical explosion & reassembly
-        this.cacheInitialTransforms();
-
-        this.isLoaded = true;
-        if (onLoad) onLoad(this);
-      },
-      (xhr) => {
-        if (xhr.lengthComputable && onProgress) {
-          const percent = (xhr.loaded / xhr.total) * 100;
-          onProgress(percent);
-        }
-      },
-      (err) => {
-        console.error("Error loading car model:", err);
-        if (onError) onError(err);
+      // 1. Remove raw shadow plane from model hierarchy before calculating bounds
+      const shadow = this.model.getObjectByName("Obj_Shadow_Plane");
+      if (shadow && shadow.parent) {
+        shadow.parent.remove(shadow);
       }
-    );
+
+      // 2. Scale car to authentic real-world supercar dimensions (length ~5.4m)
+      this.model.scale.set(0.2, 0.2, 0.2);
+      this.model.position.set(0, 0, 0);
+      this.model.updateMatrixWorld(true);
+
+      // 3. Compute accurate bounding box of pure car geometry
+      const box = new THREE.Box3().setFromObject(this.model);
+      const center = new THREE.Vector3();
+      box.getCenter(center);
+
+      // 4. Center horizontally at (0, y, 0) and ground bottom of tires cleanly at Y = 0
+      this.model.position.set(-center.x, -box.min.y, -center.z);
+      this.model.updateMatrixWorld(true);
+
+      // 5. Add model to car root group
+      this.carGroup.add(this.model);
+
+      // 6. Setup materials, registries, and SVJ Aerodynamic Wing
+      this.processMaterialsAndMeshes();
+      this.createSVJAeroWing();
+
+      // 7. Cache initial transforms for mechanical explosion & reassembly
+      this.cacheInitialTransforms();
+
+      this.isLoaded = true;
+      if (onLoad) onLoad(this);
+    };
+
+    // Priority 1: If preloaded Base64 data exists in window, parse instantly!
+    // This allows 100% pure HTML standalone execution (double click index.html via file:// with ZERO server/CORS issues)
+    if (window.CAR_MODEL_BASE64) {
+      try {
+        if (onProgress) onProgress(35);
+        const binary_string = window.atob(window.CAR_MODEL_BASE64);
+        const len = binary_string.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+          bytes[i] = binary_string.charCodeAt(i);
+        }
+        if (onProgress) onProgress(75);
+        loader.parse(
+          bytes.buffer,
+          '',
+          (gltf) => {
+            if (onProgress) onProgress(100);
+            onModelLoaded(gltf);
+          },
+          (err) => {
+            console.warn("Base64 GLTF parse error, attempting fetch fallback:", err);
+            doFetchLoad();
+          }
+        );
+        return;
+      } catch (e) {
+        console.warn("Error decoding Base64 model, falling back to fetch:", e);
+      }
+    }
+
+    // Priority 2: Standard fetch/XHR load (when running under web server)
+    const doFetchLoad = () => {
+      loader.load(
+        modelPath,
+        (gltf) => onModelLoaded(gltf),
+        (xhr) => {
+          if (xhr.lengthComputable && onProgress) {
+            const percent = (xhr.loaded / xhr.total) * 100;
+            onProgress(percent);
+          }
+        },
+        (err) => {
+          console.error("Error loading car model:", err);
+          if (onError) onError(err);
+        }
+      );
+    };
+
+    doFetchLoad();
   }
 
   processMaterialsAndMeshes() {

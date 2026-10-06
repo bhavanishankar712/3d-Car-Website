@@ -209,20 +209,43 @@ class InteractionController {
           }
           break;
 
+        case "e": // Explode/assemble toggle
+          const slider = document.getElementById("exploded-scrub-slider");
+          if (window.app) {
+            const nextTarget = window.app.targetExplosionProgress > 0.4 ? 0 : 1.0;
+            const btnTarget = nextTarget === 0 ? document.getElementById("btn-explode-0") : document.getElementById("btn-explode-100");
+            if (btnTarget) btnTarget.click();
+          }
+          break;
+
+        case "a": // Autoplay toggle
+          const autoBtn = document.getElementById("btn-explode-auto");
+          if (autoBtn) autoBtn.click();
+          break;
+
         case "1":
           this.scrollToSection("section-hero");
           break;
         case "2":
-          this.scrollToSection("section-inspect");
-          break;
-        case "3":
           this.scrollToSection("section-exploded");
           break;
+        case "3":
+          this.scrollToSection("section-anatomy");
+          break;
         case "4":
-          this.scrollToSection("section-reassembly");
+          this.scrollToSection("section-fleet");
           break;
         case "5":
-          this.scrollToSection("section-configurator");
+          this.scrollToSection("section-aero");
+          break;
+        case "6":
+          this.scrollToSection("section-powertrain");
+          break;
+        case "7":
+          this.scrollToSection("section-cockpit");
+          break;
+        case "8":
+          this.scrollToSection("section-booking");
           break;
       }
     });

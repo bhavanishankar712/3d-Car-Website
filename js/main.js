@@ -25,7 +25,20 @@ class Application {
     this.clock = new THREE.Clock();
 
     this.scrollProgress = 0;
-    this.explosionProgress = 0;
+    this.targetExplosionProgress = 0;
+    this.currentExplosionProgress = 0;
+    this.isAutoplay = false;
+    this.autoplayDirection = 1;
+    this.isUserDraggingSlider = false;
+
+    // Camera preset reference points
+    this.heroCamPos = new THREE.Vector3(-7.6, 2.3, 5.2);
+    this.heroTarget = new THREE.Vector3(0, 0.72, 0);
+    this.explodedCamPos = new THREE.Vector3(-8.8, 5.2, 7.2);
+    this.explodedTarget = new THREE.Vector3(0, 1.1, 0);
+
+    this.targetCamPos = this.heroCamPos.clone();
+    this.targetCamTarget = this.heroTarget.clone();
 
     this.initScene();
     this.initRenderer();
@@ -77,6 +90,88 @@ class Application {
       this.carCtrl,
       this.configCtrl
     );
+    this.initExplosionHUDControls();
+  }
+
+  initExplosionHUDControls() {
+    const slider = document.getElementById("exploded-scrub-slider");
+    const btn0 = document.getElementById("btn-explode-0");
+    const btn50 = document.getElementById("btn-explode-50");
+    const btn100 = document.getElementById("btn-explode-100");
+    const btnAuto = document.getElementById("btn-explode-auto");
+    const autoIcon = document.getElementById("auto-icon");
+    const autoText = document.getElementById("auto-text");
+
+    const updatePillActive = (activeBtn) => {
+      [btn0, btn50, btn100].forEach((b) => {
+        if (b) b.classList.remove("active");
+      });
+      if (activeBtn) activeBtn.classList.add("active");
+    };
+
+    if (slider) {
+      slider.addEventListener("input", (e) => {
+        this.isAutoplay = false;
+        if (btnAuto) btnAuto.classList.remove("playing");
+        if (autoIcon) autoIcon.textContent = "▶";
+        if (autoText) autoText.textContent = "AUTOPLAY";
+        this.isUserDraggingSlider = true;
+        this.targetExplosionProgress = parseFloat(e.target.value) / 100;
+        this.targetCamPos.lerpVectors(this.heroCamPos, this.explodedCamPos, this.targetExplosionProgress);
+        this.targetCamTarget.lerpVectors(this.heroTarget, this.explodedTarget, this.targetExplosionProgress);
+      });
+      slider.addEventListener("change", () => {
+        this.isUserDraggingSlider = false;
+      });
+    }
+
+    if (btn0) {
+      btn0.addEventListener("click", () => {
+        this.isAutoplay = false;
+        if (btnAuto) btnAuto.classList.remove("playing");
+        if (autoIcon) autoIcon.textContent = "▶";
+        if (autoText) autoText.textContent = "AUTOPLAY";
+        this.targetExplosionProgress = 0;
+        this.targetCamPos.copy(this.heroCamPos);
+        this.targetCamTarget.copy(this.heroTarget);
+        updatePillActive(btn0);
+      });
+    }
+
+    if (btn50) {
+      btn50.addEventListener("click", () => {
+        this.isAutoplay = false;
+        if (btnAuto) btnAuto.classList.remove("playing");
+        if (autoIcon) autoIcon.textContent = "▶";
+        if (autoText) autoText.textContent = "AUTOPLAY";
+        this.targetExplosionProgress = 0.5;
+        this.targetCamPos.lerpVectors(this.heroCamPos, this.explodedCamPos, 0.5);
+        this.targetCamTarget.lerpVectors(this.heroTarget, this.explodedTarget, 0.5);
+        updatePillActive(btn50);
+      });
+    }
+
+    if (btn100) {
+      btn100.addEventListener("click", () => {
+        this.isAutoplay = false;
+        if (btnAuto) btnAuto.classList.remove("playing");
+        if (autoIcon) autoIcon.textContent = "▶";
+        if (autoText) autoText.textContent = "AUTOPLAY";
+        this.targetExplosionProgress = 1.0;
+        this.targetCamPos.copy(this.explodedCamPos);
+        this.targetCamTarget.copy(this.explodedTarget);
+        updatePillActive(btn100);
+      });
+    }
+
+    if (btnAuto) {
+      btnAuto.addEventListener("click", () => {
+        this.isAutoplay = !this.isAutoplay;
+        btnAuto.classList.toggle("playing", this.isAutoplay);
+        if (autoIcon) autoIcon.textContent = this.isAutoplay ? "❚❚" : "▶";
+        if (autoText) autoText.textContent = this.isAutoplay ? "PAUSE" : "AUTOPLAY";
+      });
+    }
   }
 
   loadAssets() {
@@ -159,7 +254,7 @@ class Application {
     gsap.registerPlugin(ScrollTrigger);
 
     ScrollTrigger.create({
-      trigger: "#scroll-container",
+      trigger: "#three-experience-track",
       start: "top top",
       end: "bottom bottom",
       scrub: 0.35,
@@ -200,80 +295,53 @@ class Application {
       }
     }
 
-    // Camera preset reference points
-    const heroCamPos = new THREE.Vector3(-7.6, 2.3, 5.2);
-    const heroTarget = new THREE.Vector3(0, 0.72, 0);
-    const explodedCamPos = new THREE.Vector3(-8.8, 5.2, 7.2);
-    const explodedTarget = new THREE.Vector3(0, 1.1, 0);
-
-    const counterEl = document.getElementById("exploded-counter-val");
-    const meterFill = document.getElementById("exploded-meter-fill");
+    // Stop autoplay when user scrolls so user has manual control
+    if (this.isAutoplay) {
+      this.isAutoplay = false;
+      const btnAuto = document.getElementById("btn-explode-auto");
+      const autoIcon = document.getElementById("auto-icon");
+      const autoText = document.getElementById("auto-text");
+      if (btnAuto) btnAuto.classList.remove("playing");
+      if (autoIcon) autoIcon.textContent = "▶";
+      if (autoText) autoText.textContent = "AUTOPLAY";
+    }
 
     if (progress <= 0.005) {
       // Stage 1: Assembled in Hero View (with Configure Dock active at bottom)
-      this.explosionProgress = 0;
-      this.explosionCtrl.setExplosionProgress(0);
+      this.targetExplosionProgress = 0;
+      this.targetCamPos.copy(this.heroCamPos);
+      this.targetCamTarget.copy(this.heroTarget);
       if (this.carCtrl.carGroup) {
         this.carCtrl.carGroup.position.set(0, 0, 0);
       }
-
-      if (counterEl) counterEl.textContent = `0% EXPLODED`;
-      if (meterFill) meterFill.style.width = `0%`;
 
     } else if (progress > 0.005 && progress < 0.65) {
       // Stage 2: Direct Exploded Mechanical Disassembly while scrolling!
-      // Immediately maps mouse wheel scrolling into full 3D part explosion
       const t = Math.min(1, Math.max(0, (progress - 0.005) / (0.65 - 0.005)));
-      this.explosionProgress = t;
-      this.explosionCtrl.setExplosionProgress(t);
+      this.targetExplosionProgress = t;
+      this.targetCamPos.lerpVectors(this.heroCamPos, this.explodedCamPos, t);
+      this.targetCamTarget.lerpVectors(this.heroTarget, this.explodedTarget, t);
       if (this.carCtrl.carGroup) {
         this.carCtrl.carGroup.position.set(0, 0, 0);
-      }
-
-      // Update sleek telemetry HUD
-      const pct = Math.min(100, Math.round(t * 100));
-      if (counterEl) counterEl.textContent = pct === 100 ? `100% EXPLODED` : `${pct}% EXPLODED`;
-      if (meterFill) meterFill.style.width = `${pct}%`;
-
-      // Smooth camera pull-back to wide elevated angle during explosion
-      if (this.cameraCtrl && !this.cameraCtrl.isUserInteracting) {
-        this.cameraCtrl.camera.position.lerpVectors(heroCamPos, explodedCamPos, t);
-        this.cameraCtrl.controls.target.lerpVectors(heroTarget, explodedTarget, t);
       }
 
     } else if (progress >= 0.65 && progress < 0.75) {
       // Stage 2b: Hold 100% full exploded view in suspended animation
-      this.explosionProgress = 1.0;
-      this.explosionCtrl.setExplosionProgress(1.0);
+      this.targetExplosionProgress = 1.0;
+      this.targetCamPos.copy(this.explodedCamPos);
+      this.targetCamTarget.copy(this.explodedTarget);
       if (this.carCtrl.carGroup) {
         this.carCtrl.carGroup.position.set(0, 0, 0);
-      }
-
-      if (counterEl) counterEl.textContent = `100% EXPLODED // FULL DISASSEMBLY`;
-      if (meterFill) meterFill.style.width = `100%`;
-
-      if (this.cameraCtrl && !this.cameraCtrl.isUserInteracting) {
-        this.cameraCtrl.camera.copy(explodedCamPos);
-        this.cameraCtrl.controls.target.copy(explodedTarget);
       }
 
     } else {
       // Stage 3: Smooth reassembly on further scroll
       const reT = Math.max(0, 1 - (progress - 0.75) / (1.0 - 0.75));
-      this.explosionProgress = reT;
-      this.explosionCtrl.setExplosionProgress(this.explosionProgress);
+      this.targetExplosionProgress = reT;
+      this.targetCamPos.lerpVectors(this.heroCamPos, this.explodedCamPos, reT);
+      this.targetCamTarget.lerpVectors(this.heroTarget, this.explodedTarget, reT);
       if (this.carCtrl.carGroup) {
         this.carCtrl.carGroup.position.set(0, 0, 0);
-      }
-
-      const pct = Math.min(100, Math.round(this.explosionProgress * 100));
-      if (counterEl) counterEl.textContent = `${pct}% EXPLODED // REASSEMBLY`;
-      if (meterFill) meterFill.style.width = `${pct}%`;
-
-      // Camera smoothly returns closer as car reassembles
-      if (this.cameraCtrl && !this.cameraCtrl.isUserInteracting) {
-        this.cameraCtrl.camera.position.lerpVectors(heroCamPos, explodedCamPos, this.explosionProgress);
-        this.cameraCtrl.controls.target.lerpVectors(heroTarget, explodedTarget, this.explosionProgress);
       }
     }
   }
@@ -313,9 +381,58 @@ class Application {
   animate() {
     requestAnimationFrame(() => this.animate());
 
+    const delta = Math.min(this.clock.getDelta(), 0.08);
     const elapsed = this.clock.getElapsedTime();
 
+    // Cinematic Autoplay loop
+    if (this.isAutoplay) {
+      this.targetExplosionProgress += this.autoplayDirection * delta * 0.32;
+      if (this.targetExplosionProgress >= 1.0) {
+        this.targetExplosionProgress = 1.0;
+        this.autoplayDirection = -1;
+      } else if (this.targetExplosionProgress <= 0.0) {
+        this.targetExplosionProgress = 0.0;
+        this.autoplayDirection = 1;
+      }
+      this.targetCamPos.lerpVectors(this.heroCamPos, this.explodedCamPos, this.targetExplosionProgress);
+      this.targetCamTarget.lerpVectors(this.heroTarget, this.explodedTarget, this.targetExplosionProgress);
+    }
+
+    // High-precision exponential damping: frame-rate independent fluid mechanical motion
+    const damp = 1.0 - Math.exp(-12.0 * delta);
+    const diff = this.targetExplosionProgress - this.currentExplosionProgress;
+
+    if (Math.abs(diff) > 0.0001) {
+      this.currentExplosionProgress += diff * damp;
+    } else {
+      this.currentExplosionProgress = this.targetExplosionProgress;
+    }
+
+    // Apply continuous position updates to all 87 nodes with harmonic micro-float
+    if (this.explosionCtrl) {
+      this.explosionCtrl.setExplosionProgress(this.currentExplosionProgress, elapsed);
+    }
+
+    // Update Telemetry HUD metrics
+    const pct = Math.min(100, Math.max(0, Math.round(this.currentExplosionProgress * 100)));
+    const counterEl = document.getElementById("exploded-counter-val");
+    const meterFill = document.getElementById("exploded-meter-fill");
+    const sliderEl = document.getElementById("exploded-scrub-slider");
+
+    if (counterEl) {
+      if (pct === 0) counterEl.textContent = `0% EXPLODED // ASSEMBLED`;
+      else if (pct === 100) counterEl.textContent = `100% EXPLODED // FULL DISASSEMBLY`;
+      else counterEl.textContent = `${pct}% EXPLODED`;
+    }
+    if (meterFill) meterFill.style.width = `${pct}%`;
+    if (sliderEl && !this.isUserDraggingSlider) sliderEl.value = pct;
+
+    // Smoothly blend camera position & target during exploded mode if user is not manually orbiting
     if (this.cameraCtrl) {
+      if (!this.cameraCtrl.isUserInteracting && (this.currentExplosionProgress > 0.005 || this.targetExplosionProgress > 0.005)) {
+        this.cameraCtrl.camera.position.lerp(this.targetCamPos, damp * 0.82);
+        this.cameraCtrl.controls.target.lerp(this.targetCamTarget, damp * 0.82);
+      }
       this.cameraCtrl.update();
     }
 
