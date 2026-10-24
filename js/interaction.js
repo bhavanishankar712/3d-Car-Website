@@ -159,10 +159,20 @@ class InteractionController {
     const rotateBtn = document.getElementById("btn-rotate-toggle");
     if (rotateBtn) {
       rotateBtn.addEventListener("click", () => {
-        const rotating = this.cameraCtrl.toggleAutoRotate();
+        const rotating = window.app ? window.app.toggleCarAutoRotate() : this.cameraCtrl.toggleAutoRotate();
         rotateBtn.classList.toggle("active", rotating);
         const label = rotateBtn.querySelector(".deck-label");
         if (label) label.textContent = rotating ? "TURNTABLE: ON" : "TURNTABLE: OFF";
+        this.playClickSound();
+      });
+    }
+
+    // 4. Auto-Color Toggle
+    const autoColorBtn = document.getElementById("btn-autocolor-toggle");
+    if (autoColorBtn) {
+      autoColorBtn.addEventListener("click", () => {
+        const active = window.app ? window.app.toggleAutoColor() : true;
+        autoColorBtn.classList.toggle("active", active);
         this.playClickSound();
       });
     }
@@ -229,23 +239,9 @@ class InteractionController {
         case "2":
           this.scrollToSection("section-exploded");
           break;
-        case "3":
-          this.scrollToSection("section-anatomy");
-          break;
-        case "4":
-          this.scrollToSection("section-fleet");
-          break;
-        case "5":
-          this.scrollToSection("section-aero");
-          break;
-        case "6":
-          this.scrollToSection("section-powertrain");
-          break;
-        case "7":
-          this.scrollToSection("section-cockpit");
-          break;
-        case "8":
-          this.scrollToSection("section-booking");
+        case "z":
+          const zoomBtn = document.getElementById("btn-explode-zoom360");
+          if (zoomBtn) zoomBtn.click();
           break;
       }
     });

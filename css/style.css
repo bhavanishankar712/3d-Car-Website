@@ -188,69 +188,272 @@ html, body {
 /* ==========================================================================
    Minimal Hero Top Branding (No Nav Menu)
    ========================================================================== */
-.hero-header-minimal {
-  position: absolute;
-  top: 24px;
-  left: 36px;
-  right: 36px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 40;
-  pointer-events: none;
-  transition: opacity 0.35s ease;
+/* ==========================================================================
+   Hero Presentation Overlay (Removed per user request)
+   ========================================================================== */
+.hero-content-overlay {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
 }
 
-.hero-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.brand-icon {
-  width: 28px;
-  height: 28px;
-  filter: drop-shadow(0 0 10px var(--accent-cyan));
-}
-
-.brand-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.brand-title {
-  font-family: var(--font-mono);
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  color: #fff;
-}
-
-.brand-meta {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: var(--accent-cyan);
-}
-
-.hero-scroll-invite {
-  display: flex;
+/* Eyebrow Pill Badge */
+.hero-eyebrow-pill {
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 2.5px;
-  color: var(--accent-cyan);
-  background: rgba(0, 210, 255, 0.08);
-  border: 1px solid rgba(0, 210, 255, 0.25);
-  padding: 6px 14px;
-  border-radius: 20px;
-  animation: floatBounce 2s infinite ease-in-out;
+  background: rgba(0, 210, 255, 0.09);
+  border: 1px solid rgba(0, 210, 255, 0.3);
+  padding: 5px 12px;
+  border-radius: 30px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  width: fit-content;
+  box-shadow: 0 4px 18px rgba(0, 210, 255, 0.12);
 }
 
-@keyframes floatBounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(4px); }
+.live-dot {
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan);
+  animation: pulseDot 1.8s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 8px var(--accent-cyan); }
+  50% { transform: scale(1.4); opacity: 0.5; box-shadow: 0 0 16px var(--accent-cyan); }
+}
+
+.hero-eyebrow-text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--accent-cyan);
+}
+
+.hero-eyebrow-sep {
+  width: 1px;
+  height: 9px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.hero-eyebrow-sub {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+}
+
+/* Grand Hero Title */
+.hero-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hero-brand-line {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3.5px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.hero-main-title {
+  font-family: var(--font-mono);
+  font-size: clamp(26px, 3.2vw, 36px);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+  text-shadow: 0 4px 25px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 210, 255, 0.3);
+}
+
+.highlight-cyan {
+  color: var(--accent-cyan);
+  text-shadow: 0 0 25px rgba(0, 210, 255, 0.65);
+}
+
+.hero-tagline {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: #a4b6cb;
+  max-width: 100%;
+  margin-top: 2px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+/* Telemetry Metrics Row */
+.hero-telemetry-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+  margin: 2px 0 4px 0;
+  pointer-events: auto;
+}
+
+.hero-stat-card {
+  background: rgba(12, 17, 26, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9px;
+  padding: 8px 6px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: center;
+  transition: var(--transition-smooth);
+}
+
+.hero-stat-card:hover {
+  border-color: rgba(0, 210, 255, 0.5);
+  background: rgba(16, 24, 38, 0.85);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 210, 255, 0.2);
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.5px;
+  line-height: 1.1;
+}
+
+.stat-unit {
+  font-size: 10.5px;
+  color: var(--accent-cyan);
+  font-weight: 700;
+  margin-left: 1.5px;
+}
+
+.text-cyan {
+  color: var(--accent-cyan) !important;
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--text-dim);
+  line-height: 1.2;
+}
+
+/* Action CTAs */
+.hero-cta-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto;
+  margin-top: 2px;
+}
+
+.hero-btn-primary {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-blue) 100%);
+  color: #03060a;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  padding: 11px 16px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 210, 255, 0.45), 0 0 12px rgba(0, 210, 255, 0.25);
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-btn-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(0, 210, 255, 0.7), 0 0 20px rgba(0, 210, 255, 0.4);
+}
+
+.hero-btn-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.hero-btn-secondary {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 10px 16px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.hero-btn-secondary:hover {
+  background: rgba(0, 210, 255, 0.12);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 18px rgba(0, 210, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Quick Tip */
+.hero-hint-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 1.6px;
+  color: var(--accent-cyan);
+  opacity: 0.85;
+  margin-top: 2px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  transition: opacity 0.3s ease;
+}
+
+.hero-hint-tip:hover {
+  opacity: 1;
+}
+
+/* Dock Highlight Animation */
+@keyframes dockPulse {
+  0% { box-shadow: 0 16px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(0, 210, 255, 0.12); transform: scale(1); }
+  50% { box-shadow: 0 22px 65px rgba(0, 0, 0, 0.9), 0 0 50px rgba(0, 210, 255, 0.75); border-color: rgba(0, 210, 255, 0.95); transform: scale(1.02); }
+  100% { box-shadow: 0 16px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(0, 210, 255, 0.12); transform: scale(1); }
+}
+
+.hero-config-dock.dock-highlight {
+  animation: dockPulse 0.85s cubic-bezier(0.16, 1, 0.3, 1) 2;
+  border-color: rgba(0, 210, 255, 0.85) !important;
 }
 
 /* ==========================================================================
@@ -285,43 +488,50 @@ html, body {
 }
 
 /* ==========================================================================
-   Hero Section Bottom Configurator Dock
+   Hero Section Bottom-Left Colors & Configurator Dock
    ========================================================================== */
 .hero-config-dock {
   position: absolute;
   bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(94vw, 980px);
-  background: rgba(9, 13, 20, 0.88);
+  left: 3.5vw;
+  width: min(520px, 92vw);
+  background: rgba(8, 12, 20, 0.90);
   border: 1px solid var(--border-glass);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border-radius: 20px;
-  padding: 14px 22px;
+  border-radius: 18px;
+  padding: 14px 20px;
   box-shadow: 0 16px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(0, 210, 255, 0.12);
-  z-index: 50;
+  z-index: 80;
   transition: opacity 0.35s ease, transform 0.35s ease;
   pointer-events: auto;
 }
 
 .dock-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  gap: 7px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  padding-bottom: 10px;
+  padding-bottom: 7px;
 }
 
 .dock-tabs {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   overflow-x: auto;
   scrollbar-width: none;
 }
 .dock-tabs::-webkit-scrollbar { display: none; }
+
+.dock-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.dock-actions::-webkit-scrollbar { display: none; }
 
 .config-tab-btn {
   background: transparent;
@@ -385,6 +595,33 @@ html, body {
   border-color: var(--accent-cyan);
   color: var(--accent-cyan);
   box-shadow: 0 0 10px rgba(0, 210, 255, 0.25);
+}
+
+.dock-btn-collapse {
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--accent-cyan);
+  border-color: rgba(0, 210, 255, 0.3);
+}
+
+.dock-btn-collapse:hover {
+  background: rgba(0, 210, 255, 0.16);
+  border-color: var(--accent-cyan);
+}
+
+.hero-config-dock.collapsed {
+  padding: 10px 20px;
+}
+
+.hero-config-dock.collapsed .dock-header {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.hero-config-dock.collapsed .dock-panes,
+.hero-config-dock.collapsed .dock-footer {
+  display: none !important;
 }
 
 .dock-dot {
@@ -584,6 +821,210 @@ html, body {
   0% { transform: scaleY(0.2); transform-origin: top; opacity: 0.3; }
   50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
   100% { transform: scaleY(0.2); transform-origin: bottom; opacity: 0.3; }
+}
+
+/* ==========================================================================
+   Section 2: Supercar Specification & Engineering Overview
+   (Car moves to Right, Content on Left)
+   ========================================================================== */
+.section-overview-showcase {
+  height: 100vh;
+  position: relative;
+  width: 100%;
+  pointer-events: none;
+}
+
+.overview-left-panel {
+  position: fixed;
+  top: 50%;
+  left: 3.5vw;
+  width: min(480px, 38vw);
+  background: rgba(8, 12, 20, 0.86);
+  border: 1px solid rgba(0, 210, 255, 0.22);
+  border-radius: 20px;
+  padding: 22px 26px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 210, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(-50%) translateX(-40px);
+  transition: opacity 0.4s ease, border-color 0.3s ease;
+  z-index: 50;
+}
+
+.overview-left-panel:hover {
+  border-color: rgba(0, 210, 255, 0.45);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 45px rgba(0, 210, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.overview-left-panel.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Eyebrow Pill */
+.overview-eyebrow-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 210, 255, 0.09);
+  border: 1px solid rgba(0, 210, 255, 0.3);
+  padding: 5px 12px;
+  border-radius: 30px;
+  width: fit-content;
+}
+
+.overview-eyebrow-text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--accent-cyan);
+}
+
+.overview-eyebrow-sep {
+  width: 1px;
+  height: 9px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.overview-eyebrow-sub {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+}
+
+/* Title */
+.overview-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.overview-brand-line {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+}
+
+.overview-main-title {
+  font-family: var(--font-mono);
+  font-size: clamp(26px, 2.8vw, 34px);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: 1.5px;
+  color: #fff;
+}
+
+.overview-tagline {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: #a4b6cb;
+  margin-top: 2px;
+}
+
+/* Telemetry Grid */
+.overview-telemetry-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.overview-stat-card {
+  background: rgba(12, 17, 26, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: var(--transition-smooth);
+}
+
+.overview-stat-card:hover {
+  border-color: rgba(0, 210, 255, 0.35);
+  background: rgba(14, 22, 35, 0.85);
+}
+
+/* Engineering Features List */
+.overview-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 2px 0;
+}
+
+.overview-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 8px 12px;
+  transition: var(--transition-smooth);
+}
+
+.overview-feature-item:hover {
+  background: rgba(0, 210, 255, 0.05);
+  border-color: rgba(0, 210, 255, 0.22);
+}
+
+.feature-icon-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(0, 210, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.feature-icon-box svg {
+  width: 15px;
+  height: 15px;
+}
+
+.feature-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.feature-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #fff;
+}
+
+.feature-desc {
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  color: var(--text-dim);
+  line-height: 1.35;
+}
+
+/* CTAs */
+.overview-cta-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
 }
 
 /* 360 Inspection Section */

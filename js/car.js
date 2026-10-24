@@ -11,10 +11,13 @@ class CarController {
     this.scene = scene;
     this.carGroup = new THREE.Group();
     this.carGroup.name = "CarRoot";
+    // Scale carGroup to elegant, beautifully proportioned supercar showroom scale
+    this.carGroup.scale.set(0.86, 0.86, 0.86);
     this.scene.add(this.carGroup);
 
     this.model = null;
     this.materials = {};
+    this.bodyMaterials = new Set();
     this.meshRegistry = {};
     this.originalTransforms = new Map();
     this.wheels = {
@@ -65,37 +68,7 @@ class CarController {
       if (onLoad) onLoad(this);
     };
 
-    // Priority 1: If preloaded Base64 data exists in window, parse instantly!
-    // This allows 100% pure HTML standalone execution (double click index.html via file:// with ZERO server/CORS issues)
-    if (window.CAR_MODEL_BASE64) {
-      try {
-        if (onProgress) onProgress(35);
-        const binary_string = window.atob(window.CAR_MODEL_BASE64);
-        const len = binary_string.length;
-        const bytes = new Uint8Array(len);
-        for (let i = 0; i < len; i++) {
-          bytes[i] = binary_string.charCodeAt(i);
-        }
-        if (onProgress) onProgress(75);
-        loader.parse(
-          bytes.buffer,
-          '',
-          (gltf) => {
-            if (onProgress) onProgress(100);
-            onModelLoaded(gltf);
-          },
-          (err) => {
-            console.warn("Base64 GLTF parse error, attempting fetch fallback:", err);
-            doFetchLoad();
-          }
-        );
-        return;
-      } catch (e) {
-        console.warn("Error decoding Base64 model, falling back to fetch:", e);
-      }
-    }
-
-    // Priority 2: Standard fetch/XHR load (when running under web server)
+    // Priority 1: High-Speed Direct Binary Fetch (instant on HTTP/HTTPS ~60ms)
     const doFetchLoad = () => {
       loader.load(
         modelPath,
@@ -107,13 +80,55 @@ class CarController {
           }
         },
         (err) => {
-          console.error("Error loading car model:", err);
-          if (onError) onError(err);
+          console.warn("Direct binary fetch failed, attempting Base64 fallback:", err);
+          if (window.CAR_MODEL_BASE64) {
+            doBase64Parse();
+          } else if (onError) {
+            onError(err);
+          }
         }
       );
     };
 
-    doFetchLoad();
+    // Priority 2: In-memory Base64 decoder for pure file:// standalone execution
+    const doBase64Parse = () => {
+      if (!window.CAR_MODEL_BASE64) {
+        if (onError) onError(new Error("No model data available"));
+        return;
+      }
+      try {
+        if (onProgress) onProgress(45);
+        const binary_string = window.atob(window.CAR_MODEL_BASE64);
+        const len = binary_string.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+          bytes[i] = binary_string.charCodeAt(i);
+        }
+        if (onProgress) onProgress(85);
+        loader.parse(
+          bytes.buffer,
+          '',
+          (gltf) => {
+            if (onProgress) onProgress(100);
+            onModelLoaded(gltf);
+          },
+          (err) => {
+            console.error("Base64 GLTF parse error:", err);
+            if (onError) onError(err);
+          }
+        );
+      } catch (e) {
+        console.error("Error decoding Base64 model:", e);
+        if (onError) onError(e);
+      }
+    };
+
+    // When running under HTTP/HTTPS local or production server, use lightning fast binary fetch
+    if (window.location.protocol === 'file:' && window.CAR_MODEL_BASE64) {
+      doBase64Parse();
+    } else {
+      doFetchLoad();
+    }
   }
 
   processMaterialsAndMeshes() {
@@ -131,7 +146,12 @@ class CarController {
           if (matName === "Mt_Body") {
             // Exterior Paint: Clearcoat car paint matching reference image
             this.materials.body = mat;
-            mat.color.setHex(0xd6dce5); // Pearlescent Grigio Titans Silver
+            this.bodyMaterials.add(mat);
+            if (window.app && window.app.configCtrl && window.app.configCtrl.currentConfig && window.app.configCtrl.currentConfig.bodyColor) {
+              mat.color.setHex(window.app.configCtrl.currentConfig.bodyColor.hex);
+            } else {
+              mat.color.setHex(0xd6dce5); // Pearlescent Grigio Titans Silver
+            }
             mat.metalness = 0.82;
             mat.roughness = 0.2;
             mat.clearcoat = 1.0;
@@ -266,11 +286,11 @@ class CarController {
     });
   }
 
-  setHeadlightsState(isOn) {
+  setHeadlightsState(isOn, intensity = null) {
     if (this.materials.headlights) {
       if (isOn) {
         this.materials.headlights.emissive.setHex(0xd8f2ff);
-        this.materials.headlights.emissiveIntensity = 2.8;
+        this.materials.headlights.emissiveIntensity = intensity !== null ? intensity : 2.8;
       } else {
         this.materials.headlights.emissive.setHex(0x11161d);
         this.materials.headlights.emissiveIntensity = 0.05;
@@ -306,6 +326,221 @@ class CarController {
         }
       }
     });
+  }
+
+  // 1. Wheel Rolling Rotation for Fleet Track Mode
+  rotateWheels(delta, speed = 8.5) {
+    const angle = delta * speed;
+    const wheelNames = [
+      "Obj_Rim_T0A_FL", "Obj_Rim_T0B_FL", "Obj_Tyre_FL",
+      "Obj_Rim_T0A_FR", "Obj_Rim_T0B_FR", "Obj_Tyre_FR",
+      "Obj_Rim_T0A_RL", "Obj_Rim_T0B_RL", "Obj_Tyre_RL",
+      "Obj_Rim_T0A_RR", "Obj_Rim_T0B_RR", "Obj_Tyre_RR"
+    ];
+    wheelNames.forEach((name) => {
+      const mesh = this.meshRegistry[name];
+      if (mesh) {
+        mesh.rotation.z += angle;
+      }
+    });
+  }
+
+  // 2. Dihedral Scissor Door Animation (74° Upward Pivot)
+  setScissorDoorProgress(t) {
+    this.scissorDoorProgress = t; // 0 (closed) to 1 (full open)
+    const doorNodes = ["Obj_Side_Doors", "Obj_Doors_UpperFrame"];
+    doorNodes.forEach((name) => {
+      const node = this.meshRegistry[name];
+      const orig = this.originalTransforms.get(name);
+      if (node && orig) {
+        node.position.x = orig.position.x - 0.22 * t;
+        node.position.y = orig.position.y + 0.88 * t;
+        node.position.z = orig.position.z + 0.42 * t;
+        node.rotation.x = orig.rotation.x + 0.08 * t;
+        node.rotation.y = orig.rotation.y + 0.18 * t;
+        node.rotation.z = orig.rotation.z + 0.74 * t;
+      }
+    });
+  }
+
+  // 3. SVJ Aerodynamic Wing Angle of Attack
+  setSVJAeroWingAngle(angleRad) {
+    const wing = this.meshRegistry["Obj_SVJ_AeroWing"];
+    if (wing) {
+      wing.rotation.z = angleRad;
+    }
+  }
+
+  // 4. Aerodynamic Suspension Squat
+  setSuspensionSquat(yOffset) {
+    if (this.model) {
+      if (this.baseModelY === undefined) {
+        this.baseModelY = this.model.position.y;
+      }
+      this.model.position.y = this.baseModelY + yOffset;
+    }
+  }
+
+  // 5. Physical Engine V12 Chassis Harmonic Vibration
+  setEngineVibration(intensity, elapsed, baseY = 0, basePitch = 0) {
+    if (this.carGroup && this.isLoaded) {
+      if (intensity > 0.001) {
+        const freq = 42.0;
+        const vibY = Math.sin(elapsed * freq) * 0.012 * intensity;
+        const vibPitch = Math.sin(elapsed * freq * 1.3) * 0.006 * intensity;
+        const vibRoll = Math.cos(elapsed * freq * 0.85) * 0.005 * intensity;
+        this.carGroup.position.y = baseY + vibY;
+        this.carGroup.rotation.x = basePitch + vibPitch;
+        this.carGroup.rotation.z = vibRoll;
+      } else {
+        this.carGroup.position.y = baseY;
+        this.carGroup.rotation.x = basePitch;
+        this.carGroup.rotation.z = 0;
+      }
+    }
+  }
+
+  // Set exterior body paint color directly (RGB 0.0-1.0)
+  setBodyColorRGB(r, g, b, roughness = null, metalness = null) {
+    if (this.materials.body) {
+      this.materials.body.color.setRGB(r, g, b);
+      if (roughness !== null) this.materials.body.roughness = roughness;
+      if (metalness !== null) this.materials.body.metalness = metalness;
+      this.materials.body.needsUpdate = true;
+    }
+    if (this.bodyMaterials) {
+      this.bodyMaterials.forEach((m) => {
+        m.color.setRGB(r, g, b);
+        if (roughness !== null) m.roughness = roughness;
+        if (metalness !== null) m.metalness = metalness;
+        m.needsUpdate = true;
+      });
+    }
+  }
+
+  // Set exterior body paint color via Hex
+  setBodyColorHex(hex) {
+    if (this.materials.body) {
+      this.materials.body.color.setHex(hex);
+      this.materials.body.needsUpdate = true;
+    }
+    if (this.bodyMaterials) {
+      this.bodyMaterials.forEach((m) => {
+        m.color.setHex(hex);
+        m.needsUpdate = true;
+      });
+    }
+  }
+
+  // Set brake caliper color via Hex
+  setCaliperColorHex(hex) {
+    if (this.materials.caliper) {
+      this.materials.caliper.color.setHex(hex);
+    }
+  }
+
+  // 6. Fleet Supercar Livery Morphing
+  setFleetModel(modelKey) {
+    const fleetSpecs = {
+      svj: {
+        name: "Aventador SVJ 63",
+        color: 0xd6dce5,
+        roughness: 0.20,
+        metalness: 0.82,
+        clearcoat: 1.0,
+        caliper: 0xc40018,
+        wheelStyle: 0
+      },
+      revuelto: {
+        name: "Revuelto V12 HPEV",
+        color: 0xff5500,
+        roughness: 0.16,
+        metalness: 0.88,
+        clearcoat: 1.0,
+        caliper: 0xffcc00,
+        wheelStyle: 1
+      },
+      sto: {
+        name: "Huracán STO Track Edition",
+        color: 0x0088ff,
+        roughness: 0.14,
+        metalness: 0.85,
+        clearcoat: 1.0,
+        caliper: 0xff3b00,
+        wheelStyle: 1
+      },
+      urus: {
+        name: "Urus Performante",
+        color: 0xffc400,
+        roughness: 0.22,
+        metalness: 0.80,
+        clearcoat: 1.0,
+        caliper: 0x151618,
+        wheelStyle: 0
+      },
+      sian: {
+        name: "Sián FKP 37 Hypercar",
+        color: 0x485848,
+        roughness: 0.35,
+        metalness: 0.75,
+        clearcoat: 0.8,
+        caliper: 0xd4af37,
+        wheelStyle: 2
+      }
+    };
+
+    const spec = fleetSpecs[modelKey] || fleetSpecs.svj;
+    if (this.materials.body && typeof gsap !== "undefined") {
+      gsap.to(this.materials.body.color, {
+        r: ((spec.color >> 16) & 255) / 255,
+        g: ((spec.color >> 8) & 255) / 255,
+        b: (spec.color & 255) / 255,
+        duration: 0.75,
+        ease: "power2.out"
+      });
+      this.materials.body.roughness = spec.roughness;
+      this.materials.body.metalness = spec.metalness;
+      this.materials.body.clearcoat = spec.clearcoat;
+      this.materials.body.needsUpdate = true;
+    }
+
+    if (this.materials.caliper) {
+      this.materials.caliper.color.setHex(spec.caliper);
+      this.materials.caliper.needsUpdate = true;
+    }
+
+    this.setWheelStyle(spec.wheelStyle);
+    this.triggerStrobeSequence();
+
+    return spec;
+  }
+
+  // 7. Signature High-Beam Strobe Flash
+  triggerStrobeSequence() {
+    if (this.materials.headlights && typeof gsap !== "undefined") {
+      const origIntensity = 2.8;
+      gsap.timeline()
+        .to(this.materials.headlights, { emissiveIntensity: 5.5, duration: 0.08 })
+        .to(this.materials.headlights, { emissiveIntensity: 0.8, duration: 0.08 })
+        .to(this.materials.headlights, { emissiveIntensity: 5.5, duration: 0.08 })
+        .to(this.materials.headlights, { emissiveIntensity: origIntensity, duration: 0.2 });
+    }
+  }
+
+  // 8. Cockpit Ad Personam Accent Lighting
+  setCockpitAccent(themeKey) {
+    const themes = {
+      giallo: 0xffcc00,
+      rosso: 0xff2a44,
+      cyan: 0x00d2ff,
+      verde: 0x00ff88
+    };
+    const color = themes[themeKey] || 0xffcc00;
+    if (this.materials.interior) {
+      this.materials.interior.emissive = new THREE.Color(color);
+      this.materials.interior.emissiveIntensity = 0.35;
+      this.materials.interior.needsUpdate = true;
+    }
   }
 }
 

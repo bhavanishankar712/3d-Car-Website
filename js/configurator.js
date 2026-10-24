@@ -92,16 +92,63 @@ class ConfiguratorController {
 
   applyBodyColor(colorObj) {
     this.currentConfig.bodyColor = colorObj;
-    if (this.car && this.car.materials.body) {
-      const targetColor = new THREE.Color(colorObj.hex);
-      gsap.to(this.car.materials.body.color, {
-        r: targetColor.r,
-        g: targetColor.g,
-        b: targetColor.b,
-        duration: 0.6,
-        ease: "power2.out"
-      });
+    if (window.app) {
+      window.app.isAutoColorActive = false;
+      const btn = document.getElementById("btn-autocolor-toggle");
+      if (btn) btn.classList.remove("active");
     }
+
+    const targetColor = new THREE.Color(colorObj.hex);
+
+    if (this.car) {
+      // 1. Direct model traversal for all body meshes
+      if (this.car.model) {
+        this.car.model.traverse((child) => {
+          if (child.isMesh) {
+            const mats = Array.isArray(child.material) ? child.material : [child.material];
+            mats.forEach((mat) => {
+              if (mat && (mat.name === "Mt_Body" || mat === this.car.materials.body)) {
+                gsap.to(mat.color, {
+                  r: targetColor.r,
+                  g: targetColor.g,
+                  b: targetColor.b,
+                  duration: 0.45,
+                  ease: "power2.out"
+                });
+                mat.needsUpdate = true;
+              }
+            });
+          }
+        });
+      }
+
+      // 2. Primary body material
+      if (this.car.materials && this.car.materials.body) {
+        gsap.to(this.car.materials.body.color, {
+          r: targetColor.r,
+          g: targetColor.g,
+          b: targetColor.b,
+          duration: 0.45,
+          ease: "power2.out"
+        });
+        this.car.materials.body.needsUpdate = true;
+      }
+
+      // 3. Body materials set
+      if (this.car.bodyMaterials) {
+        this.car.bodyMaterials.forEach((mat) => {
+          gsap.to(mat.color, {
+            r: targetColor.r,
+            g: targetColor.g,
+            b: targetColor.b,
+            duration: 0.45,
+            ease: "power2.out"
+          });
+          mat.needsUpdate = true;
+        });
+      }
+    }
+
     this.showToast(`Paint Applied: ${colorObj.name}`);
     this.updateBuildCode();
   }

@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="./css/showroom-page.css">
 
   <script>
-    // Preloader Dismissal Failsafe
+    // Preloader Dismissal Failsafe (Snappy 1.2s timeout)
     window.addEventListener('load', () => {
       setTimeout(() => {
         const p = document.getElementById('preloader');
@@ -20,7 +20,7 @@
           p.classList.add('loaded');
           p.style.display = 'none';
         }
-      }, 3500);
+      }, 1200);
     });
   </script>
 </head>
@@ -63,17 +63,14 @@
 
     <div class="nav-links-menu">
       <a href="#section-hero" class="nav-link-item active">3D SHOWROOM</a>
+      <a href="#section-overview" class="nav-link-item">SPECIFICATIONS</a>
       <a href="#section-exploded" class="nav-link-item">EXPLODED 3D</a>
-      <a href="#section-anatomy" class="nav-link-item">ANATOMY &amp; TECH</a>
-      <a href="#section-fleet" class="nav-link-item">THE FLEET</a>
-      <a href="#section-aero" class="nav-link-item">ALA 2.0 AERO</a>
-      <a href="#section-powertrain" class="nav-link-item">V12 ENGINE</a>
-      <a href="#section-cockpit" class="nav-link-item">COCKPIT</a>
-      <a href="#section-booking" class="nav-link-item">VIP CONCIERGE</a>
+      <a href="#section-fleet" class="nav-link-item">FLEET SHOWROOM</a>
+      <a href="#section-booking" class="nav-link-item">FLAGSHIP SALONS</a>
     </div>
 
     <div class="nav-actions-wrap">
-      <a href="#section-booking" class="nav-btn-vip">BOOK VIP DRIVE</a>
+      <a href="#section-booking" class="nav-btn-vip" id="nav-btn-explore">BOOK VIP DRIVE</a>
     </div>
   </nav>
 
@@ -92,28 +89,7 @@
     <!-- Section 1: Hero Showroom with Bottom Configurator Dock -->
     <section id="section-hero" class="scroll-section">
 
-      <!-- Minimal Top Brand Badge -->
-      <div class="hero-header-minimal">
-        <div class="hero-brand">
-          <svg class="brand-icon" viewBox="0 0 24 24" fill="none">
-            <polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 12,22 2,15.5 12,22 2,15.5 12,8.5" stroke="#00d2ff" stroke-width="1.8" fill="rgba(0, 210, 255, 0.1)"/>
-            <path d="M12 6L18 10L12 14L6 10Z" fill="#00d2ff"/>
-          </svg>
-          <div class="brand-info">
-            <span class="brand-title">AVENTADOR SVJ 63</span>
-            <span class="brand-meta">6.5L V12 // 770 CV // ALA 2.0 ACTIVE AERO</span>
-          </div>
-        </div>
-
-        <div class="hero-scroll-invite">
-          <span>SCROLL DOWN TO EXPLODE</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00d2ff" stroke-width="2">
-            <path d="M12 5v14M19 12l-7 7-7-7"/>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Configurator Option in Hero Section at the Bottom -->
+      <!-- Configurator Option in Hero Section at the Bottom Left -->
       <aside id="hero-configurator-dock" class="hero-config-dock interactive-panel" aria-label="Vehicle Configurator">
         <!-- Dock Header: Category Tabs & Vehicle Controls -->
         <div class="dock-header">
@@ -138,9 +114,16 @@
               <span class="dock-dot"></span>
               <span>360° SPIN</span>
             </button>
+            <button id="btn-autocolor-toggle" class="dock-btn" aria-label="Toggle Automatic Color Cycle">
+              <span class="dock-dot"></span>
+              <span>AUTO COLOR</span>
+            </button>
             <button id="btn-sound-toggle" class="dock-btn" aria-label="Toggle V12 Engine Sound">
               <span class="dock-dot"></span>
               <span>START V12</span>
+            </button>
+            <button id="btn-dock-toggle-collapse" class="dock-btn dock-btn-collapse" aria-label="Toggle Configurator Dock Visibility" title="Collapse / Expand Configurator Dock">
+              <span id="dock-collapse-icon">▾</span>
             </button>
           </div>
         </div>
@@ -205,12 +188,119 @@
 
       <!-- Scroll Down Indicator -->
       <div class="scroll-hint" aria-hidden="true">
-        <span class="scroll-text">SCROLL TO EXPLODE</span>
+        <span class="scroll-text">SCROLL TO EXPLORE</span>
         <div class="scroll-line"></div>
       </div>
     </section>
 
-    <!-- Section 2: Exploded Mechanical View (Scroll down to explode) -->
+    <!-- Section 2: Supercar Specification & Engineering Overview (Car moves to Right, Content on Left) -->
+    <section id="section-overview" class="scroll-section section-overview-showcase">
+      <div class="overview-left-panel interactive-panel">
+        
+        <!-- Eyebrow Pill -->
+        <div class="overview-eyebrow-pill">
+          <span class="live-dot pulse-glow"></span>
+          <span class="overview-eyebrow-text">AERODINAMICA LAMBORGHINI ATTIVA // 2.0</span>
+          <span class="overview-eyebrow-sep"></span>
+          <span class="overview-eyebrow-sub">V12 RECORD BREAKER</span>
+        </div>
+
+        <!-- Supercar Title & Moniker -->
+        <div class="overview-title-group">
+          <div class="overview-brand-line">AUTOMOBILI LAMBORGHINI // CENTRO STILE</div>
+          <h2 class="overview-main-title">
+            AVENTADOR <span class="highlight-cyan">SVJ 63</span>
+          </h2>
+          <p class="overview-tagline">
+            The ultimate naturally aspirated 6.5L V12 benchmark. 770 CV of uncompromising aerodynamic fury, ALA 2.0 active downforce vectoring, 4-wheel active steering, and ultra-lightweight carbon fiber monocoque architecture.
+          </p>
+        </div>
+
+        <!-- High-Impact Telemetry Metrics Grid -->
+        <div class="overview-telemetry-grid">
+          <div class="overview-stat-card">
+            <div class="stat-value" id="overview-stat-cv"><span class="overview-counter" data-target="770">770</span> <span class="stat-unit">CV</span></div>
+            <div class="stat-label">POWER @ 8,500 RPM</div>
+          </div>
+          <div class="overview-stat-card">
+            <div class="stat-value" id="overview-stat-accel"><span class="overview-counter" data-target="2.8" data-decimal="1">2.8</span><span class="stat-unit">S</span></div>
+            <div class="stat-label">0-100 KM/H</div>
+          </div>
+          <div class="overview-stat-card">
+            <div class="stat-value" id="overview-stat-speed"><span class="overview-counter" data-target="350">350</span><span class="stat-unit">+</span></div>
+            <div class="stat-label">KM/H TOP SPEED</div>
+          </div>
+          <div class="overview-stat-card">
+            <div class="stat-value text-cyan">ALA 2.0</div>
+            <div class="stat-label">AERO VECTORING</div>
+          </div>
+        </div>
+
+        <!-- Key Engineering Innovations List -->
+        <div class="overview-features-list">
+          <div class="overview-feature-item">
+            <div class="feature-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#00d2ff" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+            <div class="feature-text-group">
+              <div class="feature-title">ALA 2.0 ACTIVE DOWNFORCE VECTORING</div>
+              <div class="feature-desc">Active electronically modulated aero flaps in the front splitter and carbon rear wing shift downforce between left and right sides during high-speed cornering.</div>
+            </div>
+          </div>
+
+          <div class="overview-feature-item">
+            <div class="feature-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#00d2ff" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+              </svg>
+            </div>
+            <div class="feature-text-group">
+              <div class="feature-title">6.5L NATURALLY ASPIRATED V12</div>
+              <div class="feature-desc">770 CV screaming up to 8,500 RPM with dry-sump lubrication, titanium intake valves, and an ultralight tuned sports exhaust.</div>
+            </div>
+          </div>
+
+          <div class="overview-feature-item">
+            <div class="feature-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#00d2ff" stroke-width="2">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                <polyline points="2 17 12 22 22 17"/>
+                <polyline points="2 12 12 17 22 12"/>
+              </svg>
+            </div>
+            <div class="feature-text-group">
+              <div class="feature-title">CARBON MONOCOQUE &amp; PUSHROD SUSPENSION</div>
+              <div class="feature-desc">Extreme torsional rigidity with dry weight of only 1,525 kg (1.98 kg/CV) and Formula 1 inspired magneto-rheological pushrod dampers.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action CTAs -->
+        <div class="overview-cta-actions">
+          <button id="overview-btn-explode" class="hero-btn-primary">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 3v18M3 12h18M7.5 7.5l9 9M16.5 7.5l-9 9"/>
+            </svg>
+            <span>EXPLODE 3D ANATOMY</span>
+          </button>
+          <a href="#section-booking" class="hero-btn-secondary" id="overview-btn-book">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span>BOOK VIP TEST DRIVE</span>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Exploded Mechanical View (Scroll down to explode) -->
     <section id="section-exploded" class="scroll-section">
       <div class="exploded-hud-display">
         <div class="exploded-hud-tag">
@@ -233,6 +323,9 @@
             <button id="btn-explode-0" class="hud-btn-pill active" title="Assemble 0%">ASSEMBLE (0%)</button>
             <button id="btn-explode-50" class="hud-btn-pill" title="50% Mid Disassembly">50%</button>
             <button id="btn-explode-100" class="hud-btn-pill" title="100% Full Explosion">100% FULL</button>
+            <button id="btn-explode-zoom360" class="hud-btn-pill active" title="Toggle 360° Close-Up Zoom Orbit">
+              <span id="zoom-icon">🔍</span> <span id="zoom-text">360° ZOOM</span>
+            </button>
             <button id="btn-explode-auto" class="hud-btn-pill btn-pill-auto" title="Cinematic Autoplay Loop">
               <span id="auto-icon">▶</span> <span id="auto-text">AUTOPLAY</span>
             </button>
@@ -241,71 +334,48 @@
       </div>
     </section>
 
-    <!-- Section 3: Precision Reassembly on Further Scroll -->
-    <section id="section-reassembly" class="scroll-section">
-      <div class="reassembly-card interactive-panel">
-        <div class="section-tag">REASSEMBLY COMPLETE</div>
-        <h2 class="section-title">STRUCTURAL INTEGRITY RESTORED</h2>
-        <p class="section-subtitle" style="margin: 14px auto; max-width: 480px;">
-          Scroll down to explore the complete Automobili Lamborghini fleet showroom, technical anatomy, ALA 2.0 aerodynamics, and VIP test drive booking.
-        </p>
-      </div>
-    </section>
-
   </div>
 
   <!-- ========================================================================
-       FULL-LENGTH SHOWROOM LANDING PAGE CONTENT STREAM
+       LANDING PAGE CONTENT: TWO LUXURY CARS SHOWROOM SECTIONS
        ======================================================================== -->
-  <div id="landing-page-content">
+  <main id="landing-page-content">
 
     <!-- --------------------------------------------------------------------
-         1. ENGINEERING ANATOMY & 33-COMPONENT DISSECTION
-         -------------------------------------------------------------------- -->
-    <section id="section-anatomy" class="content-section">
-      <div class="section-header-block">
-        <div class="section-eyebrow">
-          <span>PRECISION ENGINEERING DISSECTION</span>
-        </div>
-        <h2 class="section-main-heading">33 PRECISION <span>SUBSYSTEMS</span></h2>
-        <p class="section-description-text">
-          Every single milligram of the Aventador SVJ is calibrated for aerodynamic balance and structural rigidity. Explore the authentic components engineered at Sant'Agata Bolognese.
-        </p>
-      </div>
-
-      <!-- Category Filter Pills -->
-      <div class="anatomy-filter-bar">
-        <button class="anatomy-filter-btn active" data-category="all">ALL SUBSYSTEMS (33)</button>
-        <button class="anatomy-filter-btn" data-category="aero">AERODYNAMICS &amp; ALA</button>
-        <button class="anatomy-filter-btn" data-category="powertrain">V12 POWERTRAIN</button>
-        <button class="anatomy-filter-btn" data-category="chassis">CHASSIS &amp; BRAKES</button>
-        <button class="anatomy-filter-btn" data-category="cockpit">COCKPIT &amp; SAFETY</button>
-      </div>
-
-      <!-- Dynamic Cards Grid (Rendered by showroom-page.js) -->
-      <div id="anatomy-grid" class="anatomy-cards-grid"></div>
-    </section>
-
-    <!-- --------------------------------------------------------------------
-         2. AUTOMOBILI LAMBORGHINI FLEET SHOWCASE
+         Section 3: AUTOMOBILI LAMBORGHINI FLEET // SUPERCAR SHOWROOM
          -------------------------------------------------------------------- -->
     <section id="section-fleet" class="content-section">
       <div class="section-header-block">
         <div class="section-eyebrow">
-          <span>THE MASTERPIECES</span>
+          <span>CENTRO STILE // SUPERCAR LINEUP</span>
         </div>
-        <h2 class="section-main-heading">AUTOMOBILI LAMBORGHINI <span>FLEET</span></h2>
+        <h2 class="section-main-heading">AUTOMOBILI LAMBORGHINI <span>FLEET SHOWROOM</span></h2>
         <p class="section-description-text">
-          Explore the peerless supercar lineage engineered in Sant'Agata Bolognese. From screaming naturally aspirated atmospheric V12s to track-honed V10s and hybrid hypercars.
+          Explore the peerless supercar lineage engineered in Sant'Agata Bolognese. From screaming naturally aspirated atmospheric V12s to track-honed V10s, super SUVs, and groundbreaking hybrid hypercars.
         </p>
+        <div class="fleet-3d-active-badge">
+          <span class="fleet-badge-dot"></span>
+          <span>ACTIVE 3D SELECTION:</span>
+          <strong id="fleet-active-spec-name">AVENTADOR SVJ 63</strong>
+          <em>(CLICK "LOAD IN 3D" TO INSPECT ANY MODEL)</em>
+        </div>
+      </div>
+
+      <!-- Fleet Category Filter Tabs -->
+      <div class="fleet-filter-bar" role="tablist">
+        <button class="fleet-filter-btn active" data-filter="all">ALL SUPERSPORTS (5)</button>
+        <button class="fleet-filter-btn" data-filter="v12">V12 ICONS (2)</button>
+        <button class="fleet-filter-btn" data-filter="v10">V10 TRACK (1)</button>
+        <button class="fleet-filter-btn" data-filter="suv">SUPER SUV (1)</button>
+        <button class="fleet-filter-btn" data-filter="few-off">FEW-OFF HYBRID (1)</button>
       </div>
 
       <div class="fleet-grid-showcase">
 
         <!-- Vehicle 1: Aventador SVJ 63 -->
-        <article class="fleet-vehicle-card">
+        <article class="fleet-vehicle-card" data-category="v12">
           <div class="fleet-image-wrap">
-            <img src="./images/car_reference.png" alt="Lamborghini Aventador SVJ 63">
+            <img src="./images/car_reference.png" alt="Lamborghini Aventador SVJ 63 Supercar">
             <div class="fleet-badge-floating">NATURALLY ASPIRATED V12</div>
           </div>
           <div class="fleet-details-wrap">
@@ -314,7 +384,7 @@
               <span class="fleet-powertrain-tag">770 CV // 6.5L V12</span>
             </div>
             <p class="fleet-car-desc">
-              The apex evolution of the naturally aspirated V12 supercar. Equipped with ALA 2.0 active aerodynamics, 4WD with active rear steering, and Nürburgring lap record heritage.
+              The apex evolution of the naturally aspirated V12 supercar. Equipped with ALA 2.0 active aerodynamics, 4WD with active rear-wheel steering, and Nürburgring lap record pedigree.
             </p>
             <div class="fleet-telemetry-metrics">
               <div class="telemetry-cell">
@@ -335,14 +405,14 @@
               </div>
             </div>
             <div class="fleet-actions-row">
-              <a href="#section-hero" class="btn-fleet-explore">INSPECT IN 3D</a>
-              <a href="#section-booking" class="btn-fleet-book">TEST DRIVE</a>
+              <button class="btn-fleet-explore" data-model="svj">INSPECT IN 3D</button>
+              <a href="#section-booking" class="btn-fleet-book" data-book-model="Aventador SVJ 63">BOOK TEST DRIVE</a>
             </div>
           </div>
         </article>
 
         <!-- Vehicle 2: Revuelto Hybrid Flagship -->
-        <article class="fleet-vehicle-card">
+        <article class="fleet-vehicle-card" data-category="v12">
           <div class="fleet-image-wrap">
             <img src="./images/showroom/revuelto.jpg" alt="Lamborghini Revuelto V12 Hybrid HPEV">
             <div class="fleet-badge-floating">FIRST V12 HYBRID HPEV</div>
@@ -353,7 +423,7 @@
               <span class="fleet-powertrain-tag">1,015 CV // V12 + 3 E-MOTORS</span>
             </div>
             <p class="fleet-car-desc">
-              The first High Performance Electrified Vehicle (HPEV) hybrid super sports car. Combining a newly engineered 6.5L V12 with three electric motors and 8-speed dual-clutch transmission.
+              The revolutionary High Performance Electrified Vehicle (HPEV) hybrid super sports car. Combining an all-new 6.5L V12 with three electric motors and 8-speed dual-clutch transmission.
             </p>
             <div class="fleet-telemetry-metrics">
               <div class="telemetry-cell">
@@ -374,16 +444,16 @@
               </div>
             </div>
             <div class="fleet-actions-row">
-              <a href="#section-booking" class="btn-fleet-explore">ENQUIRE SPEC</a>
-              <a href="#section-booking" class="btn-fleet-book">TEST DRIVE</a>
+              <button class="btn-fleet-explore" data-model="revuelto">LOAD IN 3D</button>
+              <a href="#section-booking" class="btn-fleet-book" data-book-model="Revuelto">BOOK TEST DRIVE</a>
             </div>
           </div>
         </article>
 
         <!-- Vehicle 3: Huracán STO -->
-        <article class="fleet-vehicle-card">
+        <article class="fleet-vehicle-card" data-category="v10">
           <div class="fleet-image-wrap">
-            <img src="./images/showroom/huracan_sto.jpg" alt="Lamborghini Huracán STO Track Weapon">
+            <img src="./images/showroom/huracan_sto.jpg" alt="Lamborghini Huracán STO Track Edition">
             <div class="fleet-badge-floating">SUPER TROFEO OMOLOGATA</div>
           </div>
           <div class="fleet-details-wrap">
@@ -392,7 +462,7 @@
               <span class="fleet-powertrain-tag">640 CV // 5.2L V10 NA</span>
             </div>
             <p class="fleet-car-desc">
-              A road-homologated super sports car inspired by the racing heritage of Huracán Super Trofeo EVO. Extreme aerodynamics, single-piece Cofango hood, and rear-wheel drive.
+              A road-homologated track weapon directly born from Squadra Corse motorsport heritage. Featuring extreme carbon aerodynamics, single-piece Cofango body, and pure rear-wheel drive.
             </p>
             <div class="fleet-telemetry-metrics">
               <div class="telemetry-cell">
@@ -413,14 +483,14 @@
               </div>
             </div>
             <div class="fleet-actions-row">
-              <a href="#section-booking" class="btn-fleet-explore">ENQUIRE SPEC</a>
-              <a href="#section-booking" class="btn-fleet-book">TEST DRIVE</a>
+              <button class="btn-fleet-explore" data-model="sto">LOAD IN 3D</button>
+              <a href="#section-booking" class="btn-fleet-book" data-book-model="Huracán STO">BOOK TEST DRIVE</a>
             </div>
           </div>
         </article>
 
         <!-- Vehicle 4: Urus Performante -->
-        <article class="fleet-vehicle-card">
+        <article class="fleet-vehicle-card" data-category="suv">
           <div class="fleet-image-wrap">
             <img src="./images/showroom/urus_performante.jpg" alt="Lamborghini Urus Performante Super SUV">
             <div class="fleet-badge-floating">SUPER SUV BENCHMARK</div>
@@ -431,7 +501,7 @@
               <span class="fleet-powertrain-tag">666 CV // 4.0L TWIN-TURBO V8</span>
             </div>
             <p class="fleet-car-desc">
-              Raising the bar of the Super SUV segment with carbon fiber aerodynamic enhancements, lowered steel spring suspension, Rally Mode, and Pikes Peak Hill Climb record supremacy.
+              Raising the benchmark of the Super SUV segment with lightweight carbon fiber aerodynamic wings, lowered chassis, Rally Mode calibration, and Pikes Peak Hill Climb record supremacy.
             </p>
             <div class="fleet-telemetry-metrics">
               <div class="telemetry-cell">
@@ -452,17 +522,17 @@
               </div>
             </div>
             <div class="fleet-actions-row">
-              <a href="#section-booking" class="btn-fleet-explore">ENQUIRE SPEC</a>
-              <a href="#section-booking" class="btn-fleet-book">TEST DRIVE</a>
+              <button class="btn-fleet-explore" data-model="urus">LOAD IN 3D</button>
+              <a href="#section-booking" class="btn-fleet-book" data-book-model="Urus Performante">BOOK TEST DRIVE</a>
             </div>
           </div>
         </article>
 
         <!-- Vehicle 5: Sián FKP 37 -->
-        <article class="fleet-vehicle-card">
+        <article class="fleet-vehicle-card" data-category="few-off">
           <div class="fleet-image-wrap">
-            <img src="./images/showroom/sian.jpg" alt="Lamborghini Sián FKP 37 Limited Edition">
-            <div class="fleet-badge-floating">LIMITED 63 UNITS WORLD</div>
+            <img src="./images/showroom/sian.jpg" alt="Lamborghini Sián FKP 37 Limited Edition Hypercar">
+            <div class="fleet-badge-floating">LIMITED 63 UNITS WORLDWIDE</div>
           </div>
           <div class="fleet-details-wrap">
             <div class="fleet-title-row">
@@ -470,7 +540,7 @@
               <span class="fleet-powertrain-tag">819 CV // SUPERCAPACITOR V12</span>
             </div>
             <p class="fleet-car-desc">
-              Groundbreaking hybrid hypercar powered by the world's first automotive application of supercapacitors, providing 3x the power of a battery of equal weight. Only 63 coupés built.
+              Pioneering hybrid masterpiece powered by the world's first automotive application of supercapacitors, discharging 3x the electrical power of batteries of equal mass. Only 63 coupés handcrafted.
             </p>
             <div class="fleet-telemetry-metrics">
               <div class="telemetry-cell">
@@ -491,8 +561,8 @@
               </div>
             </div>
             <div class="fleet-actions-row">
-              <a href="#section-booking" class="btn-fleet-explore">PRIVATE ARCHIVE</a>
-              <a href="#section-booking" class="btn-fleet-book">VIP INQUIRY</a>
+              <button class="btn-fleet-explore" data-model="sian">LOAD IN 3D</button>
+              <a href="#section-booking" class="btn-fleet-book" data-book-model="Sián FKP 37">BOOK TEST DRIVE</a>
             </div>
           </div>
         </article>
@@ -501,236 +571,16 @@
     </section>
 
     <!-- --------------------------------------------------------------------
-         3. ALA 2.0 ACTIVE AERODYNAMICS & WIND TUNNEL
-         -------------------------------------------------------------------- -->
-    <section id="section-aero" class="content-section">
-      <div class="section-header-block">
-        <div class="section-eyebrow">
-          <span>AERODINAMICA LAMBORGHINI ATTIVA</span>
-        </div>
-        <h2 class="section-main-heading">ALA 2.0 // <span>AERODYNAMIC VECTORING</span></h2>
-        <p class="section-description-text">
-          Patented active aerodynamic system engineered by Lamborghini. Electronically modulates airflow across the vehicle in under 500 milliseconds to achieve either extreme downforce or low drag.
-        </p>
-      </div>
-
-      <div class="aero-split-layout">
-        <div class="aero-visual-wrap">
-          <img src="./images/showroom/windtunnel.jpg" alt="Lamborghini Aventador SVJ in Wind Tunnel testing ALA 2.0 active aerodynamics">
-        </div>
-
-        <div class="aero-interactive-modes">
-          <!-- Mode 1 -->
-          <div class="aero-mode-card active" data-mode="high-downforce">
-            <div class="aero-mode-header">
-              <h4 class="aero-mode-title">1. HIGH DOWNFORCE (BRAKING &amp; CORNERS)</h4>
-              <span class="aero-mode-tag">MAX TRACTION</span>
-            </div>
-            <p class="aero-mode-desc">
-              ALA flaps close completely, maximizing airflow over splitters and the carbon rear wing to generate up to 490 kg of aerodynamic downforce, gluing the vehicle to the tarmac.
-            </p>
-            <div class="aero-meter-row">
-              <span class="aero-meter-label">AERO DOWNFORCE:</span>
-              <div class="aero-bar-track">
-                <div id="ala-downforce-bar" class="aero-bar-fill" style="width: 98%;"></div>
-              </div>
-              <span id="ala-downforce-val" class="aero-bar-val">490 KG</span>
-            </div>
-          </div>
-
-          <!-- Mode 2 -->
-          <div class="aero-mode-card" data-mode="low-drag">
-            <div class="aero-mode-header">
-              <h4 class="aero-mode-title">2. LOW DRAG (HIGH-SPEED STRAIGHTAWAYS)</h4>
-              <span class="aero-mode-tag">350+ KM/H ACCELERATION</span>
-            </div>
-            <p class="aero-mode-desc">
-              Internal electro-actuated micro-flaps inside the rear wing hollow pylons open in under 500ms, stalling the wing to slash drag by 40% for blistering acceleration.
-            </p>
-            <div class="aero-meter-row">
-              <span class="aero-meter-label">AIR RESISTANCE:</span>
-              <div class="aero-bar-track">
-                <div id="ala-drag-bar" class="aero-bar-fill" style="width: 20%;"></div>
-              </div>
-              <span id="ala-drag-val" class="aero-bar-val">MINIMAL</span>
-            </div>
-          </div>
-
-          <!-- Mode 3 -->
-          <div class="aero-mode-card" data-mode="aero-vectoring">
-            <div class="aero-mode-header">
-              <h4 class="aero-mode-title">3. AERO-VECTORING (HIGH-SPEED SWEEPS)</h4>
-              <span class="aero-mode-tag">CORNERING MOMENTUM</span>
-            </div>
-            <p class="aero-mode-desc">
-              Independent left and right wing airflow channels modulate differential downforce between inside and outside wheels to optimize turn-in trajectory and eliminate understeer.
-            </p>
-            <div class="aero-meter-row">
-              <span class="aero-meter-label">FLAP ACTUATION:</span>
-              <div class="aero-bar-track">
-                <div class="aero-bar-fill" style="width: 72%;"></div>
-              </div>
-              <span id="ala-flap-status" class="aero-bar-val">DYNAMIC</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- --------------------------------------------------------------------
-         4. V12 ENGINE & INTERACTIVE TACHOMETER SIMULATOR
-         -------------------------------------------------------------------- -->
-    <section id="section-powertrain" class="content-section">
-      <div class="section-header-block">
-        <div class="section-eyebrow">
-          <span>6.5L NATURALLY ASPIRATED V12</span>
-        </div>
-        <h2 class="section-main-heading">THE V12 SYMPHONY // <span>8,500 RPM</span></h2>
-        <p class="section-description-text">
-          No turbochargers, no lag, pure mechanical acoustics. Press and hold the throttle pedal below to rev the screaming 60° naturally aspirated V12 up to redline!
-        </p>
-      </div>
-
-      <div class="powertrain-interactive-studio">
-        <!-- Left: Interactive Gauge -->
-        <div class="tachometer-gauge-box">
-          <div class="tach-svg-wrap">
-            <svg viewBox="0 0 280 280" width="280" height="280">
-              <!-- Outer Dial Ring -->
-              <circle cx="140" cy="140" r="120" stroke="rgba(255,255,255,0.1)" stroke-width="6" fill="none"/>
-              <!-- Active Glow Dial Arc -->
-              <path d="M 55,225 A 120,120 0 1,1 225,225" stroke="url(#tachGrad)" stroke-width="8" fill="none" stroke-linecap="round"/>
-              <!-- Redline Segment (7500-8500 RPM) -->
-              <path d="M 195,65 A 120,120 0 0,1 225,225" stroke="#ff2a44" stroke-width="10" fill="none" stroke-linecap="round"/>
-
-              <defs>
-                <linearGradient id="tachGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#0077ff"/>
-                  <stop offset="70%" stop-color="#00d2ff"/>
-                  <stop offset="100%" stop-color="#ff2a44"/>
-                </linearGradient>
-              </defs>
-
-              <!-- Needle -->
-              <line id="tach-needle" x1="140" y1="140" x2="140" y2="40" stroke="#00d2ff" stroke-width="4" stroke-linecap="round" transform="rotate(-120 140 140)"/>
-              <circle cx="140" cy="140" r="14" fill="#0c1017" stroke="#00d2ff" stroke-width="3"/>
-            </svg>
-
-            <!-- Digital Readout -->
-            <div class="tach-center-readout">
-              <div id="tach-rpm-display" class="tach-rpm-number">1,000</div>
-              <div class="tach-rpm-label">RPM // CRANKSHAFT</div>
-              <div id="tach-gear" class="tach-gear-badge">NEUTRAL // IDLE</div>
-            </div>
-          </div>
-
-          <div class="tach-controls-row">
-            <button id="btn-tach-rev" class="btn-rev-pedal" title="Hold to rev engine">
-              HOLD TO REV V12 (OR PRESS 'S')
-            </button>
-          </div>
-        </div>
-
-        <!-- Right: Technical Engine Specifications -->
-        <div class="powertrain-specs-list">
-          <div class="engine-stat-row">
-            <span class="engine-stat-label">DISPLACEMENT</span>
-            <span class="engine-stat-val">6,498 <span>CC (6.5 LITERS)</span></span>
-          </div>
-          <div class="engine-stat-row">
-            <span class="engine-stat-label">ENGINE ARCHITECTURE</span>
-            <span class="engine-stat-val">60° V12 <span>NATURALLY ASPIRATED</span></span>
-          </div>
-          <div class="engine-stat-row">
-            <span class="engine-stat-label">MAX POWER OUTPUT</span>
-            <span class="engine-stat-val">770 CV <span>(566 KW) @ 8,500 RPM</span></span>
-          </div>
-          <div class="engine-stat-row">
-            <span class="engine-stat-label">MAX TORQUE</span>
-            <span class="engine-stat-val">720 NM <span>@ 6,750 RPM</span></span>
-          </div>
-          <div class="engine-stat-row">
-            <span class="engine-stat-label">VALVETRAIN</span>
-            <span class="engine-stat-val">DOHC 48-VALVE <span>TITANIUM VALVES</span></span>
-          </div>
-          <div class="engine-stat-row">
-            <span class="engine-stat-label">TRANSMISSION</span>
-            <span class="engine-stat-val">7-SPEED ISR <span>(50 MS GEAR SHIFT)</span></span>
-          </div>
-          <div class="engine-stat-row">
-            <span class="engine-stat-label">ALL-WHEEL DRIVE</span>
-            <span class="engine-stat-val">HALDEX GEN IV <span>WITH REAR MECHANICAL LSD</span></span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- --------------------------------------------------------------------
-         5. AERONAUTICAL COCKPIT & HOTSPOTS
-         -------------------------------------------------------------------- -->
-    <section id="section-cockpit" class="content-section">
-      <div class="section-header-block">
-        <div class="section-eyebrow">
-          <span>AERONAUTICAL INTERIOR</span>
-        </div>
-        <h2 class="section-main-heading">FIGHTER JET COCKPIT // <span>AD PERSONAM</span></h2>
-        <p class="section-description-text">
-          Hover over the glowing telemetry hotspots to examine the driver-centric architecture crafted with exposed carbon skin, Alcantara upholstery, and aerospace ergonomics.
-        </p>
-      </div>
-
-      <div class="cockpit-hero-banner">
-        <img src="./images/showroom/cockpit.jpg" alt="Lamborghini Aventador SVJ Cockpit Interior with Alcantara and Carbon Fiber">
-
-        <!-- Hotspot 1: Start Button -->
-        <div class="cockpit-hotspot" style="top: 67%; left: 63%;">
-          <div class="hotspot-pulse"></div>
-          <div class="hotspot-tooltip">
-            <div class="tooltip-title">RED FLIP MISSILE COVER</div>
-            <div class="tooltip-desc">Aviation-inspired engine start-stop toggle</div>
-          </div>
-        </div>
-
-        <!-- Hotspot 2: Instrument Cluster -->
-        <div class="cockpit-hotspot" style="top: 42%; left: 29%;">
-          <div class="hotspot-pulse"></div>
-          <div class="hotspot-tooltip">
-            <div class="tooltip-title">DIGITAL TFT RACE CLUSTER</div>
-            <div class="tooltip-desc">G-Force meter &amp; ALA aerodynamic telemetry</div>
-          </div>
-        </div>
-
-        <!-- Hotspot 3: Paddle Shifters -->
-        <div class="cockpit-hotspot" style="top: 46%; left: 45%;">
-          <div class="hotspot-pulse"></div>
-          <div class="hotspot-tooltip">
-            <div class="tooltip-title">CARBOSKIN PADDLES</div>
-            <div class="tooltip-desc">Commanding 50ms ISR manual gear changes</div>
-          </div>
-        </div>
-
-        <!-- Hotspot 4: Alcantara Steering Wheel -->
-        <div class="cockpit-hotspot" style="top: 55%; left: 35%;">
-          <div class="hotspot-pulse"></div>
-          <div class="hotspot-tooltip">
-            <div class="tooltip-title">NERO ADE ALCANTARA</div>
-            <div class="tooltip-desc">With contrast 12-o'clock racing center strip</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- --------------------------------------------------------------------
-         6. VIP CONCIERGE & TEST DRIVE BOOKING
+         Section 4: GLOBAL FLAGSHIP SHOWROOMS & VIP CONCIERGE
          -------------------------------------------------------------------- -->
     <section id="section-booking" class="content-section">
       <div class="section-header-block">
         <div class="section-eyebrow">
-          <span>PRIVATE CLIENT SERVICES</span>
+          <span>GLOBAL AUTOMOTIVE SALONS</span>
         </div>
-        <h2 class="section-main-heading">VIP CONCIERGE // <span>BOOK PRIVATE TEST DRIVE</span></h2>
+        <h2 class="section-main-heading">FLAGSHIP SHOWROOMS &amp; <span>VIP CONCIERGE</span></h2>
         <p class="section-description-text">
-          Experience the pinnacle of Sant'Agata Bolognese performance firsthand. Schedule a confidential private showroom viewing or track demonstration.
+          Experience Italian excellence firsthand. Visit our worldwide flagship showrooms or schedule a private client viewing and high-performance circuit demonstration.
         </p>
       </div>
 
@@ -738,58 +588,107 @@
         <div class="booking-info-pane">
           <h3>EXPERIENCE ITALIAN<br>EXCELLENCE</h3>
           <p>
-            Our dedicated Client Specialists will curate a bespoke test drive demonstration at your preferred official Lamborghini showroom or FIA-homologated circuit.
+            Our dedicated Centro Stile Specialists will curate a bespoke consultation at your preferred official Lamborghini showroom salon or FIA-homologated circuit.
           </p>
 
           <div class="dealers-list">
-            <div class="dealer-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              <span>SANT'AGATA BOLOGNESE // GLOBAL HEADQUARTERS</span>
+            <div class="dealer-item active" data-dealer="Sant'Agata Bolognese">
+              <div class="dealer-info-left">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <div>
+                  <div class="dealer-city">SANT'AGATA BOLOGNESE</div>
+                  <div class="dealer-sub">GLOBAL HEADQUARTERS &amp; CENTRO STILE // VIA MODENA 12</div>
+                </div>
+              </div>
+              <span class="dealer-badge">HQ ATELIER</span>
             </div>
-            <div class="dealer-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              <span>BEVERLY HILLS // WILSHIRE SHOWROOM</span>
+
+            <div class="dealer-item" data-dealer="Beverly Hills">
+              <div class="dealer-info-left">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <div>
+                  <div class="dealer-city">BEVERLY HILLS</div>
+                  <div class="dealer-sub">WILSHIRE BOULEVARD SHOWROOM &amp; PRIVATE SALON // CA, USA</div>
+                </div>
+              </div>
+              <span class="dealer-badge">FLAGSHIP</span>
             </div>
-            <div class="dealer-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              <span>MONACO // MONTE CARLO FLAGSHIP</span>
+
+            <div class="dealer-item" data-dealer="Monaco">
+              <div class="dealer-info-left">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <div>
+                  <div class="dealer-city">MONACO</div>
+                  <div class="dealer-sub">MONTE CARLO HARBOUR SALON // PORT HERCULE, MONACO</div>
+                </div>
+              </div>
+              <span class="dealer-badge">COTE D'AZUR</span>
             </div>
-            <div class="dealer-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              <span>LONDON // MAYFAIR PRIVATE LOUNGE</span>
+
+            <div class="dealer-item" data-dealer="London Mayfair">
+              <div class="dealer-info-left">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <div>
+                  <div class="dealer-city">LONDON MAYFAIR</div>
+                  <div class="dealer-sub">BERKELEY SQUARE PRIVATE CLIENT LOUNGE // LONDON, UK</div>
+                </div>
+              </div>
+              <span class="dealer-badge">PRIVATE LOUNGE</span>
             </div>
-            <div class="dealer-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              <span>TOKYO // GINZA AUTOMOTIVE SALON</span>
+
+            <div class="dealer-item" data-dealer="Tokyo Ginza">
+              <div class="dealer-info-left">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <div>
+                  <div class="dealer-city">TOKYO GINZA</div>
+                  <div class="dealer-sub">CHUO-KU AUTOMOTIVE SALON // TOKYO, JAPAN</div>
+                </div>
+              </div>
+              <span class="dealer-badge">ASIA PACIFIC</span>
             </div>
-            <div class="dealer-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              <span>DUBAI // SHEIKH ZAYED SHOWROOM</span>
+
+            <div class="dealer-item" data-dealer="Dubai DIFC">
+              <div class="dealer-info-left">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <div>
+                  <div class="dealer-city">DUBAI DIFC</div>
+                  <div class="dealer-sub">SHEIKH ZAYED SHOWROOM // DUBAI, UAE</div>
+                </div>
+              </div>
+              <span class="dealer-badge">MIDDLE EAST</span>
             </div>
+          </div>
+
+          <div class="dealers-amenities-row">
+            <span class="amenity-pill">AD PERSONAM STUDIO</span>
+            <span class="amenity-pill">VIP ENCLOSED DELIVERY</span>
+            <span class="amenity-pill">CIRCUIT DEMO TRACK</span>
+            <span class="amenity-pill">SQUADRA CORSE TELEMETRY</span>
           </div>
         </div>
 
+        <!-- VIP Booking Inquiry Form -->
         <form id="vip-booking-form" class="booking-form">
           <div class="form-group-row">
             <div class="form-field">
               <label class="form-label" for="book-model">SELECT VEHICLE</label>
               <select id="book-model" class="form-select" required>
-                <option value="Aventador SVJ 63">Aventador SVJ 63 (V12 NA)</option>
-                <option value="Revuelto">Revuelto (V12 Hybrid HPEV)</option>
-                <option value="Huracán STO">Huracán STO (V10 Track)</option>
-                <option value="Urus Performante">Urus Performante (Super SUV)</option>
-                <option value="Sián FKP 37">Sián FKP 37 (Hybrid Hypercar)</option>
+                <option value="Aventador SVJ 63">Aventador SVJ 63 (6.5L V12 NA - 770 CV)</option>
+                <option value="Revuelto">Revuelto (V12 Hybrid HPEV - 1,015 CV)</option>
+                <option value="Huracán STO">Huracán STO (5.2L V10 NA - 640 CV)</option>
+                <option value="Urus Performante">Urus Performante (4.0L V8 TT - 666 CV)</option>
+                <option value="Sián FKP 37">Sián FKP 37 (Supercapacitor V12 - 819 CV)</option>
               </select>
             </div>
             <div class="form-field">
-              <label class="form-label" for="book-dealer">FLAGSHIP LOCATION</label>
+              <label class="form-label" for="book-dealer">FLAGSHIP SHOWROOM SALON</label>
               <select id="book-dealer" class="form-select" required>
-                <option value="Sant'Agata Bolognese">Sant'Agata Bolognese (HQ)</option>
-                <option value="Beverly Hills">Beverly Hills</option>
-                <option value="Monaco">Monaco</option>
-                <option value="London">London Mayfair</option>
-                <option value="Tokyo">Tokyo Ginza</option>
-                <option value="Dubai">Dubai DIFC</option>
+                <option value="Sant'Agata Bolognese">Sant'Agata Bolognese (HQ Atelier, Italy)</option>
+                <option value="Beverly Hills">Beverly Hills (Wilshire Blvd, CA, USA)</option>
+                <option value="Monaco">Monaco (Monte Carlo Harbour, Monaco)</option>
+                <option value="London Mayfair">London Mayfair (Berkeley Square, UK)</option>
+                <option value="Tokyo Ginza">Tokyo Ginza (Chuo City, Japan)</option>
+                <option value="Dubai DIFC">Dubai (Sheikh Zayed Showroom, UAE)</option>
               </select>
             </div>
           </div>
@@ -808,73 +707,114 @@
           <div class="form-group-row">
             <div class="form-field">
               <label class="form-label" for="book-phone">PHONE NUMBER</label>
-              <input type="tel" id="book-phone" class="form-input" placeholder="+1 (555) 000-0000" required>
+              <input type="tel" id="book-phone" class="form-input" placeholder="+1 (555) 019-2834" required>
             </div>
             <div class="form-field">
-              <label class="form-label" for="book-date">PREFERRED DATE</label>
+              <label class="form-label" for="book-date">PREFERRED CONSULTATION DATE</label>
               <input type="date" id="book-date" class="form-input" required>
             </div>
           </div>
 
+          <div class="form-field">
+            <label class="form-label" for="book-experience">EXPERIENCE TYPE</label>
+            <select id="book-experience" class="form-select">
+              <option value="Private Showroom Inspection">Private Showroom Inspection &amp; Atelier Consultation</option>
+              <option value="Dynamic Road Demonstration">Dynamic Road Demonstration with Factory Test Driver</option>
+              <option value="Closed-Circuit Track Session">Closed-Circuit Track Demonstration (Squadra Corse)</option>
+            </select>
+          </div>
+
           <button type="submit" class="btn-submit-booking">
-            SUBMIT VIP INQUIRY
+            SUBMIT VIP SHOWROOM INQUIRY
           </button>
         </form>
       </div>
     </section>
 
-    <!-- --------------------------------------------------------------------
-         7. LUXURY AUTOMOTIVE FOOTER
-         -------------------------------------------------------------------- -->
-    <footer class="showroom-footer">
-      <div class="footer-top-row">
-        <div class="footer-brand-bio">
-          <div class="footer-logo">AUTOMOBILI <span>LAMBORGHINI</span></div>
-          <p class="footer-text">
-            Automobili Lamborghini S.p.A. is an Italian manufacturer of luxury sports cars and SUVs based in Sant'Agata Bolognese. Since 1963, crafting the most visionary supercars on earth.
-          </p>
-        </div>
+  </main>
 
-        <div>
-          <div class="footer-col-title">MODELS</div>
-          <div class="footer-links-list">
-            <a href="#section-hero">Aventador SVJ</a>
-            <a href="#section-fleet">Revuelto</a>
-            <a href="#section-fleet">Huracán STO</a>
-            <a href="#section-fleet">Urus Performante</a>
-            <a href="#section-fleet">Sián FKP 37</a>
-          </div>
-        </div>
+  <!-- VIP Booking Confirmation Modal -->
+  <div id="vip-modal-backdrop" class="vip-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-vip-title">
+    <div class="vip-modal-card">
+      <div class="vip-modal-badge">AUTOMOBILI LAMBORGHINI S.P.A. // CENTRO STILE</div>
+      <h3 id="modal-vip-title" class="vip-modal-title">VIP RESERVATION CONFIRMED</h3>
+      <p id="modal-vip-desc" class="vip-modal-desc">
+        Your private client consultation has been registered with our Centro Stile Concierge.
+      </p>
 
+      <div class="vip-dossier-grid">
         <div>
-          <div class="footer-col-title">EXPERIENCE</div>
-          <div class="footer-links-list">
-            <a href="#section-hero">3D Configurator</a>
-            <a href="#section-exploded">Exploded Anatomy</a>
-            <a href="#section-aero">ALA 2.0 Aerodynamics</a>
-            <a href="#section-powertrain">V12 Sound Simulator</a>
-            <a href="#section-booking">VIP Concierge</a>
-          </div>
+          <div class="dossier-cell-label">CLIENT NAME:</div>
+          <div id="modal-client-name" class="dossier-cell-val">Leonardo Moretti</div>
         </div>
-
         <div>
-          <div class="footer-col-title">CENTRO STILE</div>
-          <div class="footer-links-list">
-            <a href="#section-cockpit">Ad Personam Customization</a>
-            <a href="#section-booking">Factory Tour &amp; Museum</a>
-            <a href="#section-booking">Squadra Corse Motorsport</a>
-            <a href="#section-booking">Heritage Restoration</a>
-          </div>
+          <div class="dossier-cell-label">SELECTED SUPERCAR:</div>
+          <div id="modal-vehicle-model" class="dossier-cell-val">Aventador SVJ 63</div>
+        </div>
+        <div>
+          <div class="dossier-cell-label">FLAGSHIP SALON:</div>
+          <div id="modal-dealer-salon" class="dossier-cell-val">Sant'Agata Bolognese HQ</div>
+        </div>
+        <div>
+          <div class="dossier-cell-label">CONFIRMATION DOSSIER:</div>
+          <div id="modal-dossier-code" class="dossier-cell-val">LB-2026-9812</div>
         </div>
       </div>
 
-      <div class="footer-bottom-row">
-        <div>&copy; 2026 AUTOMOBILI LAMBORGHINI S.P.A. ALL RIGHTS RESERVED.</div>
-        <div>FUEL CONSUMPTION &amp; EMISSION VALUES: COMBINED 18.0 L/100 KM // CO2 448 G/KM</div>
-      </div>
-    </footer>
-
+      <button id="btn-close-vip-modal" class="btn-vip-modal-close">
+        RETURN TO SHOWROOM
+      </button>
+    </div>
   </div>
+
+  <!-- ========================================================================
+       LUXURY AUTOMOTIVE FOOTER
+       ======================================================================== -->
+  <footer class="showroom-footer">
+    <div class="footer-top-row">
+      <div class="footer-brand-bio">
+        <div class="footer-logo">AUTOMOBILI <span>LAMBORGHINI</span></div>
+        <p class="footer-text">
+          Automobili Lamborghini S.p.A. &mdash; Centro Stile Sant'Agata Bolognese. Since 1963, crafting the most visionary naturally aspirated V12 supercars on earth.
+        </p>
+      </div>
+
+      <div>
+        <div class="footer-col-title">SHOWROOM SECTIONS</div>
+        <div class="footer-links-list">
+          <a href="#section-hero">3D Aventador Configurator</a>
+          <a href="#section-exploded">Mechanical Explosion (360° Zoom)</a>
+          <a href="#section-fleet">Supercar Fleet Showroom</a>
+          <a href="#section-booking">Global Flagship Salons</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">TECHNICAL SPEC</div>
+        <div class="footer-links-list">
+          <a href="#section-hero">6.5L Naturally Aspirated V12</a>
+          <a href="#section-hero">770 CV @ 8,500 RPM</a>
+          <a href="#section-hero">ALA 2.0 Active Aerodynamics</a>
+          <a href="#section-hero">Carbon-Ceramic Braking</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">CENTRO STILE</div>
+        <div class="footer-links-list">
+          <a href="#section-fleet">Supercar Fleet Lineup</a>
+          <a href="#section-hero">Forged Monoblock Wheels</a>
+          <a href="#section-hero">Titanium Exhaust Plumes</a>
+          <a href="#section-booking">VIP Private Concierge</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom-row">
+      <div>&copy; 2026 AUTOMOBILI LAMBORGHINI S.P.A. ALL RIGHTS RESERVED.</div>
+      <div>6.5L V12 // 770 CV // 350+ KM/H // DIGITAL 3D SHOWROOM EXPERIENCE</div>
+    </div>
+  </footer>
 
   <!-- Toast Notification Pill -->
   <div id="toast-notification" role="status" aria-live="polite">Configuration Updated</div>
@@ -888,8 +828,12 @@
   <script src="./js/libs/gsap.min.js"></script>
   <script src="./js/libs/ScrollTrigger.min.js"></script>
 
-  <!-- Pre-bundled 3D Lamborghini Model for Pure HTML file:// standalone execution -->
-  <script src="./assets/models/car-model-data.js"></script>
+  <!-- Pre-bundled 3D Lamborghini Model (Loaded only on file:// to avoid 17MB blocking on HTTP) -->
+  <script>
+    if (window.location.protocol === 'file:') {
+      document.write('<script src="./assets/models/car-model-data.js"><\/script>');
+    }
+  </script>
 
   <!-- Showroom 3D Controllers -->
   <script src="./js/showroom.js"></script>

@@ -126,7 +126,7 @@
 #three-experience-track {
   position: relative;
   width: 100%;
-  height: 280vh;
+  height: 320vh;
   pointer-events: none;
   z-index: 2;
 }
@@ -136,22 +136,27 @@
   position: relative;
   width: 100%;
   z-index: 10;
-  background: linear-gradient(180deg, transparent 0%, rgba(6, 7, 10, 0.96) 120px, #06070a 100%);
+  background: transparent;
   pointer-events: auto;
 }
 
 .content-section {
   position: relative;
   width: 100%;
+  min-height: 100vh;
   padding: 120px 6vw;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(0, 210, 255, 0.12);
+  background: radial-gradient(circle at 50% 30%, rgba(6, 9, 16, 0.45) 0%, rgba(4, 6, 11, 0.78) 100%);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: background 0.6s ease;
 }
 
 /* Section Header Typography */
 .section-header-block {
   text-align: center;
-  max-width: 820px;
-  margin: 0 auto 60px auto;
+  max-width: 860px;
+  margin: 0 auto 50px auto;
 }
 
 .section-eyebrow {
@@ -192,9 +197,174 @@
 }
 
 /* ==========================================================================
-   SECTION 1: ENGINEERING ANATOMY (33 PRECISION SUBSYSTEMS)
+   INTERACTIVE 3D TELEMETRY BADGES ACROSS SECTIONS
    ========================================================================== */
-.anatomy-filter-bar {
+.fleet-3d-active-badge,
+.aero-3d-active-badge,
+.v12-3d-haptic-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 8px 18px;
+  background: rgba(0, 210, 255, 0.08);
+  border: 1px solid rgba(0, 210, 255, 0.3);
+  border-radius: 30px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: #fff;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 210, 255, 0.15);
+  animation: badgeGlowPulse 3s infinite alternate ease-in-out;
+}
+
+.fleet-3d-active-badge strong,
+.aero-3d-active-badge strong,
+.v12-3d-haptic-badge strong {
+  color: var(--accent-cyan);
+  font-weight: 800;
+}
+
+.fleet-3d-active-badge em,
+.aero-3d-active-badge em,
+.v12-3d-haptic-badge em {
+  color: var(--text-dim);
+  font-style: normal;
+  font-size: 10px;
+}
+
+.fleet-badge-dot,
+.aero-badge-dot,
+.v12-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 10px var(--accent-cyan);
+  animation: pulseDot 1.4s infinite;
+}
+
+.v12-badge-dot {
+  background: #ff4400;
+  box-shadow: 0 0 10px #ff4400;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+
+@keyframes badgeGlowPulse {
+  0% { border-color: rgba(0, 210, 255, 0.25); box-shadow: 0 4px 15px rgba(0, 210, 255, 0.1); }
+  100% { border-color: rgba(0, 210, 255, 0.6); box-shadow: 0 4px 25px rgba(0, 210, 255, 0.25); }
+}
+
+/* Cockpit 3D Dihedral Scissor Door Controls */
+.cockpit-3d-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
+  padding: 16px 24px;
+  background: rgba(10, 14, 22, 0.85);
+  border: 1px solid rgba(0, 210, 255, 0.25);
+  border-radius: 14px;
+  backdrop-filter: blur(16px);
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cockpit-door-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, rgba(0, 210, 255, 0.2), rgba(0, 102, 255, 0.3));
+  border: 1px solid var(--accent-cyan);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 18px rgba(0, 210, 255, 0.25);
+}
+
+.cockpit-door-btn:hover {
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  color: #05070a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 26px rgba(0, 210, 255, 0.5);
+}
+
+.cockpit-door-btn.door-open {
+  background: linear-gradient(135deg, rgba(255, 170, 0, 0.25), rgba(255, 68, 0, 0.35));
+  border-color: #ffaa00;
+  box-shadow: 0 4px 20px rgba(255, 170, 0, 0.3);
+}
+
+.door-status-icon {
+  font-size: 12px;
+  transition: transform 0.4s ease;
+}
+
+.cockpit-door-btn.door-open .door-status-icon {
+  transform: rotate(180deg);
+}
+
+.cockpit-theme-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cockpit-theme-selector .theme-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+}
+
+.theme-pills {
+  display: flex;
+  gap: 8px;
+}
+
+.cockpit-theme-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cockpit-theme-pill:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.cockpit-theme-pill.active {
+  background: rgba(0, 210, 255, 0.15);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.35);
+}
+
+/* ==========================================================================
+   SECTION: AUTOMOBILI LAMBORGHINI FLEET SHOWCASE
+   ========================================================================== */
+.fleet-filter-bar {
   display: flex;
   justify-content: center;
   gap: 10px;
@@ -202,7 +372,7 @@
   flex-wrap: wrap;
 }
 
-.anatomy-filter-btn {
+.fleet-filter-btn {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text-dim);
@@ -216,131 +386,19 @@
   transition: var(--transition-smooth);
 }
 
-.anatomy-filter-btn:hover {
+.fleet-filter-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
-.anatomy-filter-btn.active {
+.fleet-filter-btn.active {
   background: rgba(0, 210, 255, 0.15);
   border-color: var(--accent-cyan);
   color: var(--accent-cyan);
   box-shadow: 0 0 16px rgba(0, 210, 255, 0.3);
 }
 
-.anatomy-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 22px;
-}
-
-.anatomy-card {
-  background: var(--bg-glass-card);
-  border: 1px solid var(--border-glass);
-  border-radius: 14px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  cursor: pointer;
-  transition: var(--transition-smooth);
-  position: relative;
-  overflow: hidden;
-}
-
-.anatomy-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.anatomy-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(0, 210, 255, 0.5);
-  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 210, 255, 0.2);
-}
-
-.anatomy-card:hover::before {
-  opacity: 1;
-}
-
-.anatomy-card-preview {
-  width: 100%;
-  height: 160px;
-  background: radial-gradient(circle at center, rgba(20, 28, 45, 0.5) 0%, rgba(6, 9, 15, 0.8) 100%);
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 16px;
-  padding: 12px;
-}
-
-.anatomy-card-preview img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.8));
-  transition: transform 0.4s ease;
-}
-
-.anatomy-card:hover .anatomy-card-preview img {
-  transform: scale(1.08);
-}
-
-.anatomy-subsystem-pill {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: var(--accent-cyan);
-  margin-bottom: 6px;
-}
-
-.anatomy-card-title {
-  font-family: var(--font-heading);
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 0.5px;
-  line-height: 1.25;
-  margin-bottom: 8px;
-}
-
-.anatomy-card-desc {
-  font-family: var(--font-body);
-  font-size: 14px;
-  color: var(--text-dim);
-  line-height: 1.45;
-  flex: 1;
-  margin-bottom: 14px;
-}
-
-.anatomy-specs-row {
-  display: flex;
-  justify-content: space-between;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 10px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--text-dim);
-}
-
-.anatomy-specs-row span:last-child {
-  color: #fff;
-  font-weight: 700;
-}
-
-/* ==========================================================================
-   SECTION 2: AUTOMOBILI LAMBORGHINI FLEET SHOWCASE
-   ========================================================================== */
 .fleet-grid-showcase {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
@@ -894,19 +952,85 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-bottom: 24px;
 }
 
 .dealer-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.dealer-item:hover, .dealer-item.active {
+  background: rgba(0, 210, 255, 0.08);
+  border-color: rgba(0, 210, 255, 0.45);
+  transform: translateX(4px);
+  box-shadow: 0 4px 18px rgba(0, 210, 255, 0.15);
+}
+
+.dealer-info-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dealer-city {
   font-family: var(--font-mono);
   font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+.dealer-sub {
+  font-size: 9px;
   color: var(--text-dim);
+  letter-spacing: 1.5px;
+  margin-top: 2px;
+}
+
+.dealer-badge {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(0, 210, 255, 0.12);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(0, 210, 255, 0.3);
+  white-space: nowrap;
+}
+
+.dealers-amenities-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.amenity-pill {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--accent-cyan);
 }
 
 .dealer-item svg {
   color: var(--accent-cyan);
+  flex-shrink: 0;
 }
 
 .booking-form {
@@ -977,6 +1101,125 @@
 .btn-submit-booking:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 30px rgba(0, 210, 255, 0.65);
+}
+
+/* VIP Confirmation Modal */
+.vip-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 6, 10, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+  padding: 20px;
+}
+
+.vip-modal-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.vip-modal-card {
+  background: linear-gradient(135deg, rgba(13, 18, 28, 0.98), rgba(6, 8, 14, 0.98));
+  border: 1px solid rgba(0, 210, 255, 0.45);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.9), 0 0 50px rgba(0, 210, 255, 0.25);
+  border-radius: 20px;
+  max-width: 540px;
+  width: 100%;
+  padding: 36px;
+  text-align: center;
+  position: relative;
+  transform: translateY(20px) scale(0.96);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vip-modal-backdrop.open .vip-modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.vip-modal-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--accent-cyan);
+  background: rgba(0, 210, 255, 0.1);
+  border: 1px solid rgba(0, 210, 255, 0.3);
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.vip-modal-title {
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.vip-modal-desc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.vip-dossier-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.dossier-cell-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+}
+
+.dossier-cell-val {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  margin-top: 2px;
+}
+
+.btn-vip-modal-close {
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  color: #040508;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  padding: 12px 28px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 210, 255, 0.4);
+  transition: var(--transition-smooth);
+}
+
+.btn-vip-modal-close:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 26px rgba(0, 210, 255, 0.6);
 }
 
 /* ==========================================================================

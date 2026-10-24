@@ -277,23 +277,68 @@ class ExplosionController {
       // Quintic Smootherstep: zero velocity and acceleration shock at both endpoints
       const easeT = this.smootherStep(t);
 
-      // Subtle dynamic harmonic breathing when suspended in exploded view
-      const microFloat = isSuspended
-        ? Math.sin(time * 1.5 + ruleIdx * 0.42) * 0.016 * easeT
-        : 0;
+      // Rich, slow zero-G harmonic hovering animation across each suspended subsystem
+      let floatY = 0;
+      let floatX = 0;
+      let floatZ = 0;
+      let floatRx = 0;
+      let floatRy = 0;
+      let floatRz = 0;
+
+      if (isSuspended && easeT > 0.01) {
+        // Multi-frequency slow breathing wave (~0.5 - 0.8 Hz)
+        const phase = time * 0.85 + ruleIdx * 0.45;
+        const slowPhase = time * 0.42 + ruleIdx * 0.28;
+
+        // Altitude hover oscillation (±6.5cm range)
+        floatY = (Math.sin(phase) * 0.055 + Math.cos(slowPhase) * 0.028) * easeT;
+
+        // Gentle spatial drift along X & Z (±3.8cm range)
+        floatX = Math.sin(time * 0.58 + ruleIdx * 0.50) * 0.038 * easeT;
+        floatZ = Math.cos(time * 0.62 + ruleIdx * 0.35) * 0.038 * easeT;
+
+        // Hover micro-rotations (organic zero-G angular drift)
+        floatRx = Math.sin(time * 0.48 + ruleIdx * 0.52) * 0.035 * easeT;
+        floatRy = Math.cos(time * 0.42 + ruleIdx * 0.38) * 0.030 * easeT;
+        floatRz = Math.sin(time * 0.55 + ruleIdx * 0.60) * 0.038 * easeT;
+      }
 
       rule.nodes.forEach((nodeName) => {
         const node = this.car.meshRegistry[nodeName];
         const initial = this.car.originalTransforms.get(nodeName);
 
         if (node && initial) {
-          node.position.x = initial.position.x + rule.offset.x * easeT;
-          node.position.y = initial.position.y + rule.offset.y * easeT + microFloat;
-          node.position.z = initial.position.z + rule.offset.z * easeT;
+          node.position.x = initial.position.x + rule.offset.x * easeT + floatX;
+          node.position.y = initial.position.y + rule.offset.y * easeT + floatY;
+          node.position.z = initial.position.z + rule.offset.z * easeT + floatZ;
 
-          if (rule.offset.rx) node.rotation.x = initial.rotation.x + rule.offset.rx * easeT;
-          if (rule.offset.ry) node.rotation.y = initial.rotation.y + rule.offset.ry * easeT;
-          if (rule.offset.rz) node.rotation.z = initial.rotation.z + rule.offset.rz * easeT;
+          let rx = initial.rotation.x + (rule.offset.rx ? rule.offset.rx * easeT : 0) + floatRx;
+          let ry = initial.rotation.y + (rule.offset.ry ? rule.offset.ry * easeT : 0) + floatRy;
+          let rz = initial.rotation.z + (rule.offset.rz ? rule.offset.rz * easeT : 0) + floatRz;
+
+          // Special Slow Subsystem Animations while Suspended:
+          // 1. Slow Hypnotic Wheel & Rim Rotation in Zero-G
+          if (isSuspended && easeT > 0.1 && (nodeName.includes("Rim") || nodeName.includes("Tyre") || nodeName.includes("WheelHub"))) {
+            const wheelSpin = time * 0.22 * easeT;
+            rz += wheelSpin;
+          }
+
+          // 2. Slow Wing-Flap Hover for Dihedral Scissor Doors
+          if (isSuspended && easeT > 0.1 && nodeName.includes("Door")) {
+            const doorHover = Math.sin(time * 0.72) * 0.045 * easeT;
+            ry += doorHover;
+            rz += doorHover * 0.5;
+          }
+
+          // 3. Active SVJ Rear Wing Pitch Flutter
+          if (isSuspended && easeT > 0.1 && nodeName.includes("SVJ_AeroWing")) {
+            const wingFlutter = Math.sin(time * 0.9) * 0.03 * easeT;
+            rz += wingFlutter;
+          }
+
+          node.rotation.x = rx;
+          node.rotation.y = ry;
+          node.rotation.z = rz;
         }
       });
     });

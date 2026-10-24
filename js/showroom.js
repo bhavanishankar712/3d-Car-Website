@@ -104,8 +104,8 @@ class ShowroomController {
     this.turntableGroup = new THREE.Group();
     this.showroomGroup.add(this.turntableGroup);
 
-    // 1. Flush circular turntable platform (Radius: 5.8m)
-    const daisGeo = new THREE.CylinderGeometry(5.8, 5.85, 0.012, 96);
+    // 1. Flush circular turntable platform (Radius: 6.8m to frame larger supercar)
+    const daisGeo = new THREE.CylinderGeometry(6.8, 6.85, 0.012, 96);
     const daisMat = new THREE.MeshStandardMaterial({
       color: 0x0d121c,
       roughness: 0.20,
@@ -118,7 +118,7 @@ class ShowroomController {
     this.turntableGroup.add(daisMesh);
 
     // 2. Beveled Outer Perimeter LED Guide Ring
-    const outerRingGeo = new THREE.RingGeometry(5.72, 5.82, 96);
+    const outerRingGeo = new THREE.RingGeometry(6.72, 6.82, 96);
     this.turntableLedMat = new THREE.MeshBasicMaterial({
       color: 0x00d2ff,
       transparent: true,
@@ -132,8 +132,8 @@ class ShowroomController {
     outerRing.position.y = 0.0075;
     this.turntableGroup.add(outerRing);
 
-    // 3. Inner Concentric Technical Guide Track (Radius: 3.8m)
-    const innerRingGeo = new THREE.RingGeometry(3.78, 3.82, 96);
+    // 3. Inner Concentric Technical Guide Track (Radius: 4.8m)
+    const innerRingGeo = new THREE.RingGeometry(4.76, 4.82, 96);
     const innerRingMat = new THREE.MeshBasicMaterial({
       color: 0x00d2ff,
       transparent: true,
@@ -150,7 +150,7 @@ class ShowroomController {
     // 4. Technical Alignment Markers (Cardinal directions at 0°, 90°, 180°, 270°)
     for (let i = 0; i < 4; i++) {
       const angle = (i * Math.PI) / 2;
-      const markerGeo = new THREE.PlaneGeometry(0.35, 0.04);
+      const markerGeo = new THREE.PlaneGeometry(0.38, 0.045);
       const markerMat = new THREE.MeshBasicMaterial({
         color: 0xffffff,
         transparent: true,
@@ -159,12 +159,12 @@ class ShowroomController {
       const marker = new THREE.Mesh(markerGeo, markerMat);
       marker.rotation.x = -Math.PI / 2;
       marker.rotation.z = angle;
-      marker.position.set(Math.cos(angle) * 5.65, 0.008, Math.sin(angle) * 5.65);
+      marker.position.set(Math.cos(angle) * 6.65, 0.008, Math.sin(angle) * 6.65);
       this.turntableGroup.add(marker);
     }
 
     // 5. Multi-Layer Contact Shadow Under Car
-    const shadowGeo = new THREE.PlaneGeometry(6.2, 3.2);
+    const shadowGeo = new THREE.PlaneGeometry(8.2, 4.2);
     const shadowCanvas = document.createElement("canvas");
     shadowCanvas.width = 512;
     shadowCanvas.height = 256;
